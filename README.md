@@ -30,3 +30,9 @@ do it when I can.
 
 This is of course not all-encompassing, and it will require more work to become more complete, but this
 is helpful for me and I believe will also be helpful for others.
+
+## Naming Convention
+I try to name the header file by the name of the class it contains.  As I add more files (if I add more files)
+their names will follow that convention.  Everything is in the namespace pycpp, named for the project Py_Cpp
+(which is itself a play on the Python C API naming convention).  Otherwise I try to keep a function and class
+convention that maches the C++ STL to make everything as homogeneous as possible.
