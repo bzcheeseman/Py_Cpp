@@ -24,3 +24,4 @@ MACRO(add_example name)
 ENDMACRO()
 
 add_example(plotting)
+add_example(hello_world)

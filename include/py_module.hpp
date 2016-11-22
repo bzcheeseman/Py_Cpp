@@ -275,13 +275,18 @@ namespace pycpp {
       return out;
     }
 
+    py_module(){};
+
   public:
     /**
      * Initializes a python module by starting the interpreter and importing the desired module.
      *
      * @param package The module to import.
      */
-    py_module(std::string package, std::string which_python="/usr/local/bin/ipython"){
+    py_module(std::string package, std::string python_home="..", std::string which_python="/usr/local/bin/ipython"){
+
+      setenv("PYTHONPATH", python_home.c_str(), 1);
+
       Py_SetProgramName((char *)which_python.c_str());
 
       Py_Initialize();
@@ -372,6 +377,19 @@ namespace pycpp {
       Py_XDECREF(callable);
 
       return retval;
+    }
+
+    /**
+     * UNTESTED
+     * @param package The subpackage that is being imported - like pandas.DataFrame (for example)
+     * @return A new py_module with the subpackage as its base.
+     */
+    py_module operator[](std::string package){
+      py_module out_module;
+
+      out_module.me = PyObject_GetAttrString(this->me, package.c_str());
+
+      return out_module;
     }
 
   };
