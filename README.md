@@ -12,6 +12,13 @@ mkdir build; cd build; cmake ..; make;
 ```
 That will build all of the examples.
 
+## Running the examples
+```
+./<example>
+```
+Currently the examples I have written are `hello_world`, `subclass`, and `plotting`.  They also test basic
+functionality of the library, along with giving examples on how to use it.
+
 ## Using the library
 Py_Cpp is header-only (and I don't want to change this in the future), so just 
 include `py_module.hpp` and use it to your heart's content!
