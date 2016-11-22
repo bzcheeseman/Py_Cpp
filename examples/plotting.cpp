@@ -6,7 +6,7 @@ int main() {
 
 
   //Choose a module to import
-  pycpp::py_module p ("matplotlib.pyplot");
+  pycpp::py_module p ("matplotlib.pyplot", "/usr/local/bin/ipython");
 
   //C++ data of some form
   std::vector <double> data = {1.,2.,3.,4.};
