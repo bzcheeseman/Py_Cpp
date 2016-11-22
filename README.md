@@ -1,4 +1,4 @@
-Welcome to Py_Cpp!
+## Welcome to Py_Cpp!
 
 I wrote this library because I found myself constantly needing to call python functions 
 from my C++ applications, specifically for plotting but it can be used for other things.
