@@ -61,7 +61,8 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a>  </div>
+<a href="#func-members">Functions</a> &#124;
+<a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
 <div class="title">pycpp Namespace Reference</div>  </div>
 </div><!--header-->
@@ -107,6 +108,11 @@ Functions</h2></td></tr>
 <tr class="memitem:a27456311af877e59545a889786b08c87"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepycpp.html#a27456311af877e59545a889786b08c87">make_dict</a> (int num,...)</td></tr>
 <tr class="memdesc:a27456311af877e59545a889786b08c87"><td class="mdescLeft">&#160;</td><td class="mdescRight">Makes a PyDict.  <a href="#a27456311af877e59545a889786b08c87">More...</a><br /></td></tr>
 <tr class="separator:a27456311af877e59545a889786b08c87"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:a2b37e6c70d3f7ec480b1bc76c715d608"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepycpp.html#a2b37e6c70d3f7ec480b1bc76c715d608">which_python</a> = &quot;/usr/local/bin/ipython&quot;</td></tr>
+<tr class="separator:a2b37e6c70d3f7ec480b1bc76c715d608"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a27456311af877e59545a889786b08c87"></a>
@@ -544,6 +550,30 @@ Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A python string ready to be put into an appropriate pycpp function. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Variable Documentation</h2>
+<a id="a2b37e6c70d3f7ec480b1bc76c715d608"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b37e6c70d3f7ec480b1bc76c715d608">&sect;&nbsp;</a></span>which_python</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string pycpp::which_python = &quot;/usr/local/bin/ipython&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Selects the python executable - this is important to choose right because the wrong choice can have grave consequences - a.k.a. things won't work. If you're having trouble I recommend changing this first, especially if you used homebrew to get another python distribution alongside your system python. </p>
 
 </div>
 </div>

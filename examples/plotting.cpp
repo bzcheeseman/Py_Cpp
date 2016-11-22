@@ -4,6 +4,8 @@
 
 int main() {
 
+  pycpp::which_python = "/usr/local/bin/ipython"; //Note that matplotlib prefers ipython if you have a brewed python
+                                                  //on your system.
 
   //Choose a module to import
   pycpp::py_module p ("matplotlib.pyplot");

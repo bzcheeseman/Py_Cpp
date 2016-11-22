@@ -77,14 +77,16 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a84ac4ccf75000ce5ccbd92eafecd9d51"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a84ac4ccf75000ce5ccbd92eafecd9d51">py_module</a> (std::string package, std::string which_python=&quot;/usr/local/bin/ipython&quot;)</td></tr>
-<tr class="separator:a84ac4ccf75000ce5ccbd92eafecd9d51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d47111fb3575e3215d00686833ccd5f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a2d47111fb3575e3215d00686833ccd5f">py_module</a> (std::string package, std::string python_home=&quot;..&quot;)</td></tr>
+<tr class="separator:a2d47111fb3575e3215d00686833ccd5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68c792bf0d69f681b3effea0a1bcdd3a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a68c792bf0d69f681b3effea0a1bcdd3a">~py_module</a> ()</td></tr>
 <tr class="separator:a68c792bf0d69f681b3effea0a1bcdd3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad3f3e1c75523479f815df6e1cf1ca7"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a1ad3f3e1c75523479f815df6e1cf1ca7">operator()</a> (const std::string attr, PyObject *args, PyObject *kwargs=NULL)</td></tr>
 <tr class="separator:a1ad3f3e1c75523479f815df6e1cf1ca7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abd3b11688e82bd03f3943f3f740fbd20"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#abd3b11688e82bd03f3943f3f740fbd20">operator()</a> (const std::string attr, int num,...)</td></tr>
 <tr class="separator:abd3b11688e82bd03f3943f3f740fbd20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8e6437d5b2c9b765c60118ef39d8b7d2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classpycpp_1_1py__module.html">py_module</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a8e6437d5b2c9b765c60118ef39d8b7d2">py_class</a> (std::string klass, PyObject *args=NULL, PyObject *kwargs=NULL)</td></tr>
+<tr class="separator:a8e6437d5b2c9b765c60118ef39d8b7d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -92,6 +94,8 @@ Private Member Functions</h2></td></tr>
 <tr class="separator:aa8aaeb590650fad9ac774c57030ddb36"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8a4dfd64ad019f8761a6f4ec50dcb44e"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a8a4dfd64ad019f8761a6f4ec50dcb44e">make_tuple</a> (int num, va_list args)</td></tr>
 <tr class="separator:a8a4dfd64ad019f8761a6f4ec50dcb44e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a294453896ef45b3fad6ff48161be4152"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a294453896ef45b3fad6ff48161be4152">py_module</a> ()</td></tr>
+<tr class="separator:a294453896ef45b3fad6ff48161be4152"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
@@ -102,8 +106,33 @@ Private Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Imports a python module and offers call operators to simplify calling member functions of that module from C++. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a84ac4ccf75000ce5ccbd92eafecd9d51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a84ac4ccf75000ce5ccbd92eafecd9d51">&sect;&nbsp;</a></span>py_module()</h2>
+<a id="a294453896ef45b3fad6ff48161be4152"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a294453896ef45b3fad6ff48161be4152">&sect;&nbsp;</a></span>py_module() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">pycpp::py_module::py_module </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2d47111fb3575e3215d00686833ccd5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d47111fb3575e3215d00686833ccd5f">&sect;&nbsp;</a></span>py_module() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -121,7 +150,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>which_python</em> = <code>&quot;/usr/local/bin/ipython&quot;</code>&#160;</td>
+          <td class="paramname"><em>python_home</em> = <code>&quot;..&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -350,6 +379,56 @@ Private Attributes</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>The return value of the function as a PyObject *. It is left to the user to convert that back to C++. </dd></dl>
+
+</div>
+</div>
+<a id="a8e6437d5b2c9b765c60118ef39d8b7d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8e6437d5b2c9b765c60118ef39d8b7d2">&sect;&nbsp;</a></span>py_class()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classpycpp_1_1py__module.html">py_module</a> pycpp::py_module::py_class </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>klass</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PyObject *&#160;</td>
+          <td class="paramname"><em>args</em> = <code>NULL</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">PyObject *&#160;</td>
+          <td class="paramname"><em>kwargs</em> = <code>NULL</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Imports a class from a package so that members of that class can be called upon. Name is under consideration for changes.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">klass</td><td>The class that is being imported - like pandas.DataFrame (for example) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A new <a class="el" href="classpycpp_1_1py__module.html">py_module</a> with the subpackage as its base. </dd></dl>
 
 </div>
 </div>

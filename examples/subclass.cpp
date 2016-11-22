@@ -1,5 +1,5 @@
 //
-// Created by Aman LaChapelle on 11/21/16.
+// Created by Aman LaChapelle on 11/22/16.
 //
 // Project
 // Copyright (c) 2016 Aman LaChapelle
@@ -27,13 +27,15 @@
 
 int main(int argc, char *argv[]){
 
-  pycpp::which_python = "/usr/local/bin/python"; //Select the python executable, found by typing (bash)$ which python
+  pycpp::py_module p ("subclass", ".."); //Standard import of user-defined file, remember that it's running from
+                                         //examples/build so we need to tell it to add one directory up to the Python path
 
-  pycpp::py_module p ("hello_world", ".."); //This is a python script that I wrote in hello_world.py
+  p("add", 2, pycpp::to_python(1.1), pycpp::to_python(2.2)); //Call the add function to check and be sure that works
 
-  p("hello", 0); //And this just calls the function 'hello' from that script.
+
+  pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
+  math("multiply", 2, pycpp::to_python(1.1), pycpp::to_python(2.)); //And we call multiply to make sure that works.
 
   return 0;
+
 }
-
-

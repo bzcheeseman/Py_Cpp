@@ -1,11 +1,11 @@
 var indexSectionsWithContent =
 {
-  0: "cmopt~",
+  0: "cmoptw~",
   1: "p",
   2: "p",
   3: "p",
   4: "cmopt~",
-  5: "m"
+  5: "mw"
 };
 
 var indexSectionNames =

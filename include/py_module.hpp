@@ -32,10 +32,6 @@
 #include <sstream>
 #include <vector>
 
-/*
- * TODO: Make sure all my decref's are correct!
- */
-
 /**
  * @file include/py_module.hpp
  *
@@ -44,6 +40,13 @@
  */
 
 namespace pycpp {
+
+  /**
+   * Selects the python executable - this is important to choose right because the wrong choice can have grave
+   * consequences - a.k.a. things won't work.  If you're having trouble I recommend changing this first,
+   * especially if you used homebrew to get another python distribution alongside your system python.
+   */
+  static std::string which_python = "/usr/local/bin/ipython";
 
   /**
    * @brief Takes a vector to a python list.
@@ -283,11 +286,11 @@ namespace pycpp {
      *
      * @param package The module to import.
      */
-    py_module(std::string package, std::string python_home="..", std::string which_python="/usr/local/bin/ipython"){
+    py_module(std::string package, std::string python_home=".."){
 
       setenv("PYTHONPATH", python_home.c_str(), 1);
 
-      Py_SetProgramName((char *)which_python.c_str());
+      Py_SetProgramName((char *)pycpp::which_python.c_str());
 
       Py_Initialize();
 
@@ -301,7 +304,7 @@ namespace pycpp {
      * Destructor - cleans up the python references and finalizes the interpreter.
      */
     ~py_module(){
-      Py_XDECREF(me);
+      Py_CLEAR(me);
       Py_Finalize();
     }
 
@@ -334,10 +337,10 @@ namespace pycpp {
         PyErr_Print();
       }
 
-      Py_XDECREF(args);
+      Py_CLEAR(args);
+      Py_CLEAR(callable);
       PyDict_Clear(kwargs);
-      Py_XDECREF(kwargs);
-      Py_XDECREF(callable);
+      Py_CLEAR(kwargs);
 
       return retval;
     }
@@ -373,23 +376,43 @@ namespace pycpp {
         PyErr_Print();
       }
 
-      Py_XDECREF(args);
-      Py_XDECREF(callable);
+      Py_CLEAR(args);
+      Py_CLEAR(callable);
 
       return retval;
     }
 
     /**
-     * UNTESTED
-     * @param package The subpackage that is being imported - like pandas.DataFrame (for example)
+     * Imports a class from a package so that members of that class can be called upon.  Name is under consideration for
+     * changes.
+     *
+     * @param klass The class that is being imported - like pandas.DataFrame (for example)
      * @return A new py_module with the subpackage as its base.
      */
-    py_module operator[](std::string package){
-      py_module out_module;
+    py_module py_class(std::string klass, PyObject *args = NULL, PyObject *kwargs = NULL){
 
-      out_module.me = PyObject_GetAttrString(this->me, package.c_str());
+      assert(args == NULL || args == nullptr ||PyTuple_Check(args));
+      assert(kwargs == NULL || kwargs == nullptr || PyDict_Check(kwargs));
 
-      return out_module;
+      py_module out;
+
+      out.me = PyInstance_New( //creates a new instance of a class
+              PyObject_GetAttr(this->me, to_python(klass.c_str())), //choose the class
+              args, //pass args/kwargs
+              kwargs);
+
+      Py_XDECREF(this->me); //keep reference counts in line
+
+      if (PyErr_Occurred()){
+        PyErr_Print();
+      }
+
+      if (out.me){ //if the class imported and it's not NULL
+        return out;
+      }
+      else{ //else throw an error
+        throw std::runtime_error("Class not imported!");
+      }
     }
 
   };

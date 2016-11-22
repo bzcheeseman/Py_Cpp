@@ -8,8 +8,8 @@ find_package(Doxygen)
 if(DOXYGEN_FOUND)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile @ONLY)
     add_custom_target(docs
-            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile
-            SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/docs/Doxyfile
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile
+            SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile
             WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../docs/
             COMMENT "Generating API documentation with Doxygen" VERBATIM
             )
@@ -25,3 +25,4 @@ ENDMACRO()
 
 add_example(plotting)
 add_example(hello_world)
+add_example(subclass)
