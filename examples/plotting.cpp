@@ -14,7 +14,7 @@ int main() {
   std::vector <double> data = {1.,2.,3.,4.};
 
   //Call the python module you want to call - make sure you take all the data to python via calls to to_python. The
-  // arguments to a function are a python tuple (make_tuple) while the keyword arguments are a python dictionary (make_dict).
+  //arguments to a function are a python tuple (make_tuple) while the keyword arguments are a python dictionary (make_dict).
   p("plot",
     pycpp::make_tuple(2, pycpp::to_python(data), pycpp::to_python(data)), //arguments
     pycpp::make_dict(2, pycpp::to_python("label"), pycpp::to_python("$f(x) = x$")) //keyword arguments

@@ -21,7 +21,11 @@ functionality of the library, along with giving examples on how to use it.
 
 ## Using the library
 Py_Cpp is header-only (and I don't want to change this in the future), so just 
-include `py_module.hpp` and use it to your heart's content!
+include `py_module.hpp` and use it to your heart's content! It's important to note that you can change
+which python interpreter you're using, and you can set that with the `pycpp::which_python` variable. This
+is especially important if you have a version of python installed via homebrew (or something) that is different
+from your system python because using the wrong interpreter can cause major and confusing problems.
+In debugging applications, unless you know what's wrong this is a good place to look.
 
 ## Understanding the library
 For anyone who isn't familiar with the Python-C interface, at the base every python object is of 
