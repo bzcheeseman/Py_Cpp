@@ -5,3 +5,6 @@ script: cd tests; mkdir build; cd build; cmake ..; make
 compiler:
   - gcc
   - clang
+os:
+  - osx
+  - linux
