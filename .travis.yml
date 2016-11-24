@@ -1,5 +1,5 @@
 language: cpp
-install: python
+install: apt-get install python
 script: cd tests;mkdir build;cd build;cmake ..;make
 compiler:
   - gcc
