@@ -22,8 +22,8 @@
  */
 
 
-#ifndef PY_CPP_PYOBJECT_HPP
-#define PY_CPP_PYOBJECT_HPP
+#ifndef PY_CPP_PYMODULE_HPP
+#define PY_CPP_PYMODULE_HPP
 
 #include <Python.h>
 #include <stdexcept>
@@ -41,12 +41,12 @@
 
 //! This allows us to use the python interpreter that CMake finds.
 #ifndef WHICH_PYTHON
-#define WHICH_PYTHON "/usr/local/bin/ipython"
+  #define PYCPP_WHICH_PYTHON "/usr/local/bin/ipython"
 #endif
 
 //! Gives us a smart value for the home directory - again from the CMake source directory.
 #ifndef PY_HOME
-#define PY_HOME ".."
+  #define PYCPP_PY_HOME ".."
 #endif
 
 namespace pycpp {
@@ -56,13 +56,13 @@ namespace pycpp {
    * consequences - a.k.a. things won't work.  If you're having trouble I recommend changing this first,
    * especially if you used homebrew to get another python distribution alongside your system python.
    */
-  static std::string which_python = WHICH_PYTHON;
+  static std::string which_python = PYCPP_WHICH_PYTHON;
 
   /**
    * Sets the python home.  Generally scripts will be in the directory one up from build, so this is the default value.
    * However this is easily changed by calling pycpp::python_home = "path/to/script".
    */
-  static std::string python_home = PY_HOME;
+  static std::string python_home = PYCPP_PY_HOME;
 
   /**
    * @brief Takes a vector to a python list.
@@ -437,4 +437,4 @@ namespace pycpp {
 } //pycpp
 
 
-#endif //PY_CPP_PYOBJECT_HPP
+#endif //PY_CPP_PYMODULE_HPP

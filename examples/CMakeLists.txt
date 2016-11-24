@@ -5,11 +5,11 @@ set(BREWED 1)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 
-add_definitions(-DPY_HOME="${CMAKE_CURRENT_SOURCE_DIR}")
+add_definitions(-DPYCPP_PY_HOME="${CMAKE_CURRENT_SOURCE_DIR}")
 
 if (!BREWED)
     find_package(PythonInterp 2.5 REQUIRED)
-    add_definitions(-DWHICH_PYTHON="${PYTHON_EXECUTABLE}")
+    add_definitions(-DPYCPP_WHICH_PYTHON="${PYTHON_EXECUTABLE}")
 endif()
 
 find_package(PythonLibs 2.5 REQUIRED)
