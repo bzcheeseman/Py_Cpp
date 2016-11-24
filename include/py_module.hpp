@@ -39,6 +39,16 @@
  * to python are here.
  */
 
+//! This allows us to use the python interpreter that CMake finds.
+#ifndef WHICH_PYTHON
+#define WHICH_PYTHON "/usr/local/bin/ipython"
+#endif
+
+//! Gives us a smart value for the home directory - again from the CMake source directory.
+#ifndef PY_HOME
+#define PY_HOME ".."
+#endif
+
 namespace pycpp {
 
   /**
@@ -46,7 +56,13 @@ namespace pycpp {
    * consequences - a.k.a. things won't work.  If you're having trouble I recommend changing this first,
    * especially if you used homebrew to get another python distribution alongside your system python.
    */
-  static std::string which_python = "/usr/local/bin/ipython";
+  static std::string which_python = WHICH_PYTHON;
+
+  /**
+   * Sets the python home.  Generally scripts will be in the directory one up from build, so this is the default value.
+   * However this is easily changed by calling pycpp::python_home = "path/to/script".
+   */
+  static std::string python_home = PY_HOME;
 
   /**
    * @brief Takes a vector to a python list.
@@ -278,6 +294,9 @@ namespace pycpp {
       return out;
     }
 
+    /**
+     * Default constructor - used internally only to make sure everything is working properly.
+     */
     py_module(){};
 
   public:
@@ -286,17 +305,23 @@ namespace pycpp {
      *
      * @param package The module to import.
      */
-    py_module(std::string package, std::string python_home=".."){
+    py_module(std::string package, std::string which_py = ""){
 
-      setenv("PYTHONPATH", python_home.c_str(), 1);
+      if (!which_py.empty()){
+        setenv("PYTHONPATH", which_py.c_str(), 1);
+      }
+      else{
+        setenv("PYTHONPATH", pycpp::python_home.c_str(), 1);
+      }
 
       Py_SetProgramName((char *)pycpp::which_python.c_str());
 
       Py_Initialize();
 
-      me = PyImport_ImportModule(package.c_str());
+      me = PyImport_Import(pycpp::to_python(package.c_str()));
       if (PyErr_Occurred()){
         PyErr_Print();
+        throw std::runtime_error("Unable to import package");
       }
     }
 
@@ -324,13 +349,7 @@ namespace pycpp {
 
       PyObject *callable = PyObject_GetAttrString(me, attr.c_str());
 
-      try{
-        check_callable(callable);
-      }
-      catch (std::runtime_error &e){
-        std::cout << e.what() << std::endl;
-        return me;
-      }
+      check_callable(callable);
 
       PyObject *retval = PyObject_Call(callable, args, kwargs);
       if (PyErr_Occurred()){
@@ -363,13 +382,11 @@ namespace pycpp {
 
       PyObject *callable = PyObject_GetAttrString(me, attr.c_str());
 
-      try{
-        check_callable(callable);
-      }
-      catch (std::runtime_error &e){
-        std::cout << e.what() << std::endl;
-        return me;
-      }
+      assert(callable);
+
+      check_callable(callable);
+
+
 
       PyObject *retval = PyObject_Call(callable, args, NULL);
       if (PyErr_Occurred()){

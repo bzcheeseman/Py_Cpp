@@ -28,7 +28,9 @@
 int main(int argc, char *argv[]){
 
   pycpp::py_module p ("subclass", ".."); //Standard import of user-defined file, remember that it's running from
-                                         //examples/build so we need to tell it to add one directory up to the Python path
+                                         //examples/build so we need to tell it to add one directory up to the Python path.
+                                         //This shows the other way to select the python home - pass it as an
+                                         //argument to the constructor.
 
   p("add", 2, pycpp::to_python(1.1), pycpp::to_python(2.2)); //Call the add function to check and be sure that works
 

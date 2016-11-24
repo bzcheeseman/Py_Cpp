@@ -1,21 +1,18 @@
-cmake_minimum_required(VERSION 2.5)
+cmake_minimum_required(VERSION 3.0)
 project(examples)
+
+set(BREWED 1)
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++1y")
 
-find_package(Doxygen)
+add_definitions(-DPY_HOME="${CMAKE_CURRENT_SOURCE_DIR}")
 
-if(DOXYGEN_FOUND)
-    configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile @ONLY)
-    add_custom_target(docs
-            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile
-            SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../docs/Doxyfile
-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../docs/
-            COMMENT "Generating API documentation with Doxygen" VERBATIM
-            )
-endif(DOXYGEN_FOUND)
+if (!BREWED)
+    find_package(PythonInterp 2.5 REQUIRED)
+    add_definitions(-DWHICH_PYTHON="${PYTHON_EXECUTABLE}")
+endif()
 
-find_package(PythonLibs 2 REQUIRED)
+find_package(PythonLibs 2.5 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIR})
 
 MACRO(add_example name)
@@ -23,6 +20,6 @@ MACRO(add_example name)
     target_link_libraries(${name} ${PYTHON_LIBRARY})
 ENDMACRO()
 
-add_example(plotting)
 add_example(hello_world)
 add_example(subclass)
+add_example(plotting)

@@ -111,8 +111,10 @@ Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a2b37e6c70d3f7ec480b1bc76c715d608"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepycpp.html#a2b37e6c70d3f7ec480b1bc76c715d608">which_python</a> = &quot;/usr/local/bin/ipython&quot;</td></tr>
+<tr class="memitem:a2b37e6c70d3f7ec480b1bc76c715d608"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepycpp.html#a2b37e6c70d3f7ec480b1bc76c715d608">which_python</a> = <a class="el" href="py__module_8hpp.html#a8854818ac1eff7678346b79f54c84b98">WHICH_PYTHON</a></td></tr>
 <tr class="separator:a2b37e6c70d3f7ec480b1bc76c715d608"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7156cc5e98f2b86972618aae9eb2158c"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacepycpp.html#a7156cc5e98f2b86972618aae9eb2158c">python_home</a> = <a class="el" href="py__module_8hpp.html#acd9cc0390cff08b2600e83241b81cc45">PY_HOME</a></td></tr>
+<tr class="separator:a7156cc5e98f2b86972618aae9eb2158c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a27456311af877e59545a889786b08c87"></a>
@@ -554,6 +556,29 @@ Variables</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a7156cc5e98f2b86972618aae9eb2158c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7156cc5e98f2b86972618aae9eb2158c">&sect;&nbsp;</a></span>python_home</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string pycpp::python_home = <a class="el" href="py__module_8hpp.html#acd9cc0390cff08b2600e83241b81cc45">PY_HOME</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the python home. Generally scripts will be in the directory one up from build, so this is the default value. However this is easily changed by calling <a class="el" href="namespacepycpp.html#a7156cc5e98f2b86972618aae9eb2158c">pycpp::python_home</a> = "path/to/script". </p>
+
+</div>
+</div>
 <a id="a2b37e6c70d3f7ec480b1bc76c715d608"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2b37e6c70d3f7ec480b1bc76c715d608">&sect;&nbsp;</a></span>which_python</h2>
 
@@ -564,7 +589,7 @@ Variables</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::string pycpp::which_python = &quot;/usr/local/bin/ipython&quot;</td>
+          <td class="memname">std::string pycpp::which_python = <a class="el" href="py__module_8hpp.html#a8854818ac1eff7678346b79f54c84b98">WHICH_PYTHON</a></td>
         </tr>
       </table>
   </td>

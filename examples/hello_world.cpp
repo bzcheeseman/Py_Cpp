@@ -28,8 +28,9 @@
 int main(int argc, char *argv[]){
 
   pycpp::which_python = "/usr/local/bin/python"; //Select the python executable, found by typing (bash)$ which python
+  pycpp::python_home = ".."; //Select the python home - this is needed if you're importing scripts you wrote!
 
-  pycpp::py_module p ("hello_world", ".."); //This is a python script that I wrote in hello_world.py
+  pycpp::py_module p ("hello_world"); //This is a python script that I wrote in hello_world.py
 
   p("hello", 0); //And this just calls the function 'hello' from that script.
 
