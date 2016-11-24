@@ -5,5 +5,4 @@ script: cd examples; mkdir build; cd build; cmake ..; make; cd ../../tests/gtest
 compiler:
   - gcc
   - clang
-os:
-  - linux
+os: linux
