@@ -5,7 +5,7 @@ from my C++ applications, specifically for plotting but it can be used for other
 I tried to write it in such a way that's it's clear and self-explanatory - anything that isn't
 clear I'd be happy to change or document better (of course pull requests are always welcome too)!
 
-This is an updated version of my other project, multiplotter[https://github.com/bzcheeseman/multiplotter], that's more general and (I think) works better.
+This is an updated version of my other project, [multiplotter](https://github.com/bzcheeseman/multiplotter), that's more general and (I think) works better.
 
 ## Compiling the examples
 ```
