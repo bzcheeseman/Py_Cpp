@@ -1,10 +1,9 @@
 language: cpp
 sudo: required
 install: sudo apt-get install python
-script: cd tests; mkdir build; cd build; cmake ..; make
+script: cd examples; mkdir build; cd build; cmake ..; make; cd ../../tests/gtest; mkdir build; cd build; cmake ..; make; cd ../..; mkdir build; cd build; cmake ..; make
 compiler:
   - gcc
   - clang
 os:
-  - osx
   - linux
