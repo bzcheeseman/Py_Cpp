@@ -1,5 +1,7 @@
 ## Welcome to Py_Cpp!
 
+[![Build Status](https://travis-ci.org/bzcheeseman/py_cpp.svg?branch=master)](https://travis-ci.org/bzcheeseman/py_cpp)
+
 I wrote this library because I found myself constantly needing to call python functions 
 from my C++ applications, specifically for plotting but it can be used for other things.
 I tried to write it in such a way that's it's clear and self-explanatory - anything that isn't
