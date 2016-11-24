@@ -77,8 +77,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab0f299d398b27923d49686745e172176"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#ab0f299d398b27923d49686745e172176">py_module</a> (std::string package, std::string which_py=&quot;&quot;)</td></tr>
-<tr class="separator:ab0f299d398b27923d49686745e172176"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad11a8f2690aa91646130aa865a5bb127"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#ad11a8f2690aa91646130aa865a5bb127">py_module</a> (std::string package, std::string py_home=&quot;&quot;)</td></tr>
+<tr class="separator:ad11a8f2690aa91646130aa865a5bb127"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68c792bf0d69f681b3effea0a1bcdd3a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a68c792bf0d69f681b3effea0a1bcdd3a">~py_module</a> ()</td></tr>
 <tr class="separator:a68c792bf0d69f681b3effea0a1bcdd3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ad3f3e1c75523479f815df6e1cf1ca7"><td class="memItemLeft" align="right" valign="top">PyObject *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classpycpp_1_1py__module.html#a1ad3f3e1c75523479f815df6e1cf1ca7">operator()</a> (const std::string attr, PyObject *args, PyObject *kwargs=NULL)</td></tr>
@@ -132,8 +132,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab0f299d398b27923d49686745e172176"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab0f299d398b27923d49686745e172176">&sect;&nbsp;</a></span>py_module() <span class="overload">[2/2]</span></h2>
+<a id="ad11a8f2690aa91646130aa865a5bb127"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad11a8f2690aa91646130aa865a5bb127">&sect;&nbsp;</a></span>py_module() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -151,7 +151,7 @@ Private Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::string&#160;</td>
-          <td class="paramname"><em>which_py</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>py_home</em> = <code>&quot;&quot;</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -169,6 +169,7 @@ Private Attributes</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">package</td><td>The module to import. </td></tr>
+    <tr><td class="paramname">py_home</td><td>The home directory if it's different from <a class="el" href="namespacepycpp.html#a7156cc5e98f2b86972618aae9eb2158c">pycpp::python_home</a> (or the same, I don't judge) </td></tr>
   </table>
   </dd>
 </dl>

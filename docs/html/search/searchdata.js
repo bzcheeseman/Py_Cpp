@@ -6,7 +6,7 @@ var indexSectionsWithContent =
   3: "p",
   4: "cmopt~",
   5: "mpw",
-  6: "pw"
+  6: "p"
 };
 
 var indexSectionNames =

@@ -304,11 +304,12 @@ namespace pycpp {
      * Initializes a python module by starting the interpreter and importing the desired module.
      *
      * @param package The module to import.
+     * @param py_home The home directory if it's different from pycpp::python_home (or the same, I don't judge)
      */
-    py_module(std::string package, std::string which_py = ""){
+    py_module(std::string package, std::string py_home = ""){
 
-      if (!which_py.empty()){
-        setenv("PYTHONPATH", which_py.c_str(), 1);
+      if (!py_home.empty()){
+        setenv("PYTHONPATH", py_home.c_str(), 1);
       }
       else{
         setenv("PYTHONPATH", pycpp::python_home.c_str(), 1);
@@ -385,8 +386,6 @@ namespace pycpp {
       assert(callable);
 
       check_callable(callable);
-
-
 
       PyObject *retval = PyObject_Call(callable, args, NULL);
       if (PyErr_Occurred()){
