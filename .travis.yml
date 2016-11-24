@@ -1,0 +1,6 @@
+language: cpp
+install: python
+script: cd tests;mkdir build;cd build;cmake ..;make
+compiler:
+  -gcc
+  -clang
