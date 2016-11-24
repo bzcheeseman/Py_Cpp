@@ -1,4 +1,5 @@
 language: cpp
+sudo: required
 install: sudo apt-get install python
 script: cd tests;mkdir build;cd build;cmake ..;make
 compiler:
