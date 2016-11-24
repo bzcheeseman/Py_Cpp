@@ -1,6 +1,15 @@
 language: cpp
 sudo: required
-install: sudo apt-get install python
+dist: trusty
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+      - llvm-toolchain-precise-3.6
+    packages:
+      - gcc-5
+      - g++-5
+      - clang-3.6
 script:
   - cd examples
   - mkdir build; cd build
@@ -14,4 +23,6 @@ script:
 compiler:
   - gcc
   - clang
-os: linux
+os:
+  - linux
+  - osx
