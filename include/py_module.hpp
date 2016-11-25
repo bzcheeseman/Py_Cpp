@@ -33,6 +33,10 @@
 #include <vector>
 
 /**
+ * @todo: get linux (and/or windows) build working
+ */
+
+/**
  * @file include/py_module.hpp
  *
  * Holds the pycpp namespace. All the methods and functions related to importing Python modules and converting C++ values
