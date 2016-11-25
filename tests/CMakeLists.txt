@@ -19,7 +19,7 @@ include_directories(gtest/include)
 find_package(PythonLibs 2.5 REQUIRED)
 include_directories(${PYTHON_INCLUDE_DIR})
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}}/gtest/build)
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/gtest/build)
 
 MACRO(add_test name)
     add_executable(${name} ${name}.cpp)
