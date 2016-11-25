@@ -24,7 +24,7 @@ link_directories(${CMAKE_CURRENT_SOURCE_DIR}/gtest/build)
 MACRO(add_test name)
     add_executable(${name} ${name}.cpp)
     target_link_libraries(${name} ${PYTHON_LIBRARY})
-    target_link_libraries(${name} gtest gtest_main)
+    target_link_libraries(${name} libgtest.a libgtest_main.a)
 ENDMACRO()
 
 add_test(unit_tests)
