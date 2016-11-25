@@ -24,5 +24,4 @@ compiler:
   - gcc
   - clang
 os:
-  - linux
   - osx
