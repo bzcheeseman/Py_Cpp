@@ -33,7 +33,7 @@
 #include <vector>
 
 /**
- * @todo: get linux (and/or windows) build working
+ * @todo: get windows build working?
  */
 
 /**
@@ -44,12 +44,12 @@
  */
 
 //! This allows us to use the python interpreter that CMake finds.
-#ifndef WHICH_PYTHON
+#ifndef PYCPP_WHICH_PYTHON
   #define PYCPP_WHICH_PYTHON "/usr/local/bin/ipython"
 #endif
 
 //! Gives us a smart value for the home directory - again from the CMake source directory.
-#ifndef PY_HOME
+#ifndef PYCPP_PY_HOME
   #define PYCPP_PY_HOME ".."
 #endif
 
