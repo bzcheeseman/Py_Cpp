@@ -53,6 +53,9 @@ int main(int argc, char *argv[]){
 
   //Corresponds to python calls matplotlib.pyplot.legend() and matplotlib.pyplot.show() respectively.
   py_call(p, "legend", pyc_make_tuple(0), NULL);
-  py_call(p, "show", pyc_make_tuple(0), NULL); //problem with drawing the figures??
+  py_call(p, "show", pyc_make_tuple(0), NULL);
+  
+  //Clean up
+  free_py_module(p);
 }
 
