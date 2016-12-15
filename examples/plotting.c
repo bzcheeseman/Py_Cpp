@@ -48,9 +48,6 @@ int main(int argc, char *argv[]){
           pyc_make_tuple(2, xdata, ydata),
           pyc_make_dict(2, PyString_FromString("label"), PyString_FromString("$f(x) = x")));
 
-  //Do the same as above with only arguments - keyword arguments don't work with this interface.
-  py_call(p, "plot", pyc_make_tuple(3, xdata, ydata, PyString_FromString("o")), NULL);
-
   //Corresponds to python calls matplotlib.pyplot.legend() and matplotlib.pyplot.show() respectively.
   py_call(p, "legend", pyc_make_tuple(0), NULL);
   py_call(p, "show", pyc_make_tuple(0), NULL);
