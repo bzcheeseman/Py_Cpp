@@ -150,6 +150,7 @@ void free_py_module(py_module* module){
     close_log(module->log);
     free(module);
   }
+  Py_Finalize();
 }
 
 /**
@@ -224,14 +225,23 @@ PyObject *pyc_make_dict(int num, ...){
  */
 PyObject *py_call(py_module *module, const char *attr, PyObject *args, PyObject *kwargs){
   assert(PyTuple_Check(args));
-  assert(kwargs == NULL || PyDict_Check(kwargs));
 
   if (module){
     PyObject *callable = PyObject_GetAttrString(module->me, attr);
 
     check_callable(callable, module->log);
 
-    PyObject *retval = PyObject_Call(callable, args, kwargs);
+    PyObject *retval;
+
+    if (kwargs == NULL){
+      retval = PyObject_Call(callable, args, NULL);
+    }
+    else if (PyDict_Check(kwargs)){
+      retval = PyObject_Call(callable, args, kwargs);
+    }
+    else{
+      to_log("object_call.log", "Error, kwargs not NULL or a PyDict", module->log);
+    }
     if (PyErr_Occurred()){
       PyErr_Print();
       to_log("object_call.log", "Error during object call, attr: ", module->log);

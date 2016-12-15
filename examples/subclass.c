@@ -24,7 +24,9 @@
 #include "../include/py_module.h"
 
 int main(int argc, char *argv[]){
-  py_module *p = new_py_module("subclass", ".."); //Standard import of user-defined file, remember that it's running from
+  pyc_which_python = "/usr/local/bin/python";
+
+  py_module *p = new_py_module("subclass", "../../examples"); //Standard import of user-defined file, remember that it's running from
   //examples/build so we need to tell it to add one directory up to the Python path.
   //This shows the other way to select the python home - pass it as an
   //argument to the constructor.

@@ -24,11 +24,13 @@
 #include "../include/py_module.h"
 
 int main(int argc, char *argv[]){
-  pyc_which_python = "/usr/local/bin/ipython"; //Note that matplotlib prefers ipython if you have a brewed python
+  pyc_which_python = "/usr/local/bin/python"; //Note that matplotlib prefers brewed python if you have it
   //on your system.
 
+  //matplotlib is picky in C - gotta make sure the backend is right
+  setenv("MPLBACKEND", "qt4agg", 1);
   //Choose a module to import
-  py_module *p = new_py_module("matplotlib.pyplot", NULL);
+  py_module *p = new_py_module("matplotlib.pyplot", pyc_python_home);
 
   //C++ data of some form
   double data[4] = {1.,2.,3.,4.};
@@ -51,6 +53,6 @@ int main(int argc, char *argv[]){
 
   //Corresponds to python calls matplotlib.pyplot.legend() and matplotlib.pyplot.show() respectively.
   py_call(p, "legend", pyc_make_tuple(0), NULL);
-  py_call(p, "savefig", pyc_make_tuple(1, PyString_FromString("plotting_example.png")), NULL); //problem with drawing the figures??
+  py_call(p, "show", pyc_make_tuple(0), NULL); //problem with drawing the figures??
 }
 
