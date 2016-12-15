@@ -24,6 +24,7 @@
 #include <gtest/gtest.h>
 
 #include "../include/py_module.hpp"
+#include "../include/py_module.h"
 
 TEST(PyImport, BadImport) {
   EXPECT_THROW(pycpp::py_module module ("foo"), std::runtime_error);
@@ -55,6 +56,42 @@ TEST(PyCall, BadAttr){
 }
 
 TEST(PyCall, NotCallable){
+  pycpp::py_module module ("os");
+  EXPECT_ANY_THROW(module("environ", 0));
+}
+
+////////// C Unit Tests ////////////
+
+TEST(PyImport_C, BadImport) {
+  EXPECT_THROW(pycpp::py_module module ("foo"), std::runtime_error);
+}
+
+TEST(PyImport_C, matplotlib){
+  EXPECT_NO_THROW(pycpp::py_module module ("matplotlib"));
+}
+
+TEST(PyImport_C, GoodImport){
+  EXPECT_NO_THROW(pycpp::py_module module ("sys"));
+  EXPECT_NO_THROW(pycpp::py_module module ("os"));
+  EXPECT_NO_THROW(pycpp::py_module module ("time"));
+  EXPECT_NO_THROW(pycpp::py_module module ("socket"));
+}
+
+TEST(PyImport_C, BadUserImport){
+  EXPECT_ANY_THROW(pycpp::py_module module ("hello_world"));
+}
+
+//TEST(PyImport, GoodUserImport){ //this doesn't work for some reason...
+//  pycpp::python_home += "/scripts";
+//  EXPECT_NO_THROW(pycpp::py_module module ("hello_world"));
+//}
+
+TEST(PyCall_C, BadAttr){
+  pycpp::py_module module ("sys");
+  EXPECT_DEATH(module("foo", 0), "Assertion failed");
+}
+
+TEST(PyCall_C, NotCallable){
   pycpp::py_module module ("os");
   EXPECT_ANY_THROW(module("environ", 0));
 }

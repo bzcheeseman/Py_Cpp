@@ -35,7 +35,7 @@ MACRO(add_example name)
 ENDMACRO()
 
 MACRO(add_c_example name)
-    add_executable(${name}_c ${name}.c ../include/py_module.h ../internal/logging.h)
+    add_executable(${name}_c ${name}.c ../include/py_module.h)
     target_link_libraries(${name}_c ${PYTHON_LIBRARY})
 ENDMACRO()
 
