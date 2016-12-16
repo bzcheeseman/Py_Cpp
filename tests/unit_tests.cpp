@@ -24,7 +24,7 @@
 #include <gtest/gtest.h>
 
 #include "../include/py_module.hpp"
-#include "../include/py_module.h"
+//#include "../include/py_module.h"
 
 TEST(PyImport, BadImport) {
   EXPECT_THROW(pycpp::py_module module ("foo"), std::runtime_error);
