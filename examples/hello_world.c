@@ -24,7 +24,7 @@
 #include "../include/py_module.h"
 
 int main(int argc, char *argv[]){
-  py_module *module = new_py_module("hello_world", "..");
+  py_module *module = new_py_module("hello_world", "../../examples");
   PyObject *retval = py_call(module, "hello", pyc_make_tuple(0), NULL);
   if(retval){
     free_py_module(module);
