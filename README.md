@@ -74,3 +74,8 @@ I try to name the header file by the name of the class it contains.  As I add mo
 their names will follow that convention.  Everything is in the namespace pycpp, named for the project Py_Cpp
 (which is itself a play on the Python C API naming convention).  Otherwise I try to keep a function and class
 convention that maches the C++ STL to make everything as homogeneous as possible.
+
+## Project To-Do
+ - Update the README
+ - C unit tests
+ - Subclass in C needs to work
