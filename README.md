@@ -9,6 +9,15 @@ clear I'd be happy to change or document better (of course pull requests are alw
 
 This is an updated version of my other project, [multiplotter](https://github.com/bzcheeseman/multiplotter), that's more general and (I think) works better.
 
+## Dependencies
+```
+Python >= 2.5
+cmake >= 3.0
+```
+
+If you're on MacOSX and use Homebrew AND you have a brewed version of Python installed, make sure 
+you link to the correct `libpython`, you should find yours in `/usr/local/Frameworks/Python.framework/Versions/Current/lib/libpython2.7.dylib`
+
 ## Compiling Tests and Examples
 ```
 mkdir build; cd build; cmake ..
@@ -27,7 +36,7 @@ cd ../../../build/tests; make
 ```
 The first command builds the gtest libraries, the second makes the tests, and the third and fourth
 run tests in C++ and C respectively. The C++ tests use the google test framework, but I've copied the code
-into the repo so that this library has no dependencies other than `Python.h` and the python libraries.
+into the repo so that this library has no dependencies other than those listed.
 
 ## Using the library - C++
 Py_Cpp is header-only (and I don't want to change this in the future), so just 
