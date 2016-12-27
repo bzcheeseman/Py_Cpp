@@ -13,8 +13,8 @@ addons:
 script:
   - mkdir build; cd build; cmake ..
   - cd examples; make
-  - ./*_c; ./*
-  - cd ../tests; make
+  - cd ../../tests/gtest; mkdir build; cd build; cmake ..; make
+  - cd ../../../build/tests; make
   - ./unit_tests_c; ./unit_tests
 compiler:
   - gcc
