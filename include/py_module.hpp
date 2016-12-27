@@ -387,8 +387,6 @@ namespace pycpp {
 
       PyObject *callable = PyObject_GetAttrString(me, attr.c_str());
 
-      assert(callable);
-
       check_callable(callable);
 
       PyObject *retval = PyObject_Call(callable, args, NULL);

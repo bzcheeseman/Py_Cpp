@@ -47,7 +47,7 @@ TEST(PyImport, BadUserImport){
 
 TEST(PyCall, BadAttr){
   pycpp::py_module module ("sys");
-  EXPECT_DEATH(module("foo", 0), "Assertion failed");
+  EXPECT_ANY_THROW(module("foo", 0));
 }
 
 TEST(PyCall, NotCallable){
