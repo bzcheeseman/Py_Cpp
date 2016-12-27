@@ -145,7 +145,7 @@ py_module *new_py_module(const char *package, const char *py_home){
  *
  * @param module The module to free
  */
-void free_py_module(py_module* module){
+void delete_py_module(py_module *module){
   if (module){
     Py_XDECREF(module->me);
     close_log(module->log);
@@ -241,7 +241,7 @@ PyObject *pyc_make_list(double *list, size_t len){
  * @param kwargs The keyword args to pass to the function as a PyDict
  * @return The return value of the function call - conversion is up to the user
  */
-PyObject *py_call(py_module *module, const char *attr, PyObject *args, PyObject *kwargs){
+PyObject *pyc_py_call(py_module *module, const char *attr, PyObject *args, PyObject *kwargs){
 
   assert(PyTuple_Check(args));
   assert(kwargs == NULL || PyDict_Check(kwargs));
@@ -294,7 +294,7 @@ PyObject *py_call(py_module *module, const char *attr, PyObject *args, PyObject 
  * @param kwargs Keyword arguments to pass to the class constructor
  * @return A new py_module with the imported class contained within it.
  */
-py_module *py_class(py_module *module, const char *klass, PyObject *args, PyObject *kwargs){
+py_module *pyc_py_class(py_module *module, const char *klass, PyObject *args, PyObject *kwargs){
 
   assert(args == NULL || PyTuple_Check(args));
   assert(kwargs == NULL || PyDict_Check(kwargs));

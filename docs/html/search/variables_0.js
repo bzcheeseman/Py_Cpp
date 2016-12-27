@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['me',['me',['../classpycpp_1_1py__module.html#a302db4da9527d6871ad0582cfd87365b',1,'pycpp::py_module']]]
+  ['log',['log',['../structpy__module.html#a7f624acae617551d789f4299995f6624',1,'py_module']]]
 ];

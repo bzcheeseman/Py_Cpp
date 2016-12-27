@@ -44,15 +44,15 @@ int main(int argc, char *argv[]){
 
   //Call the python module you want to call - make sure you take all the data to python via calls to to_python. The
   //arguments to a function are a python tuple (make_tuple) while the keyword arguments are a python dictionary (make_dict).
-  py_call(p, "plot",
-          pyc_make_tuple(2, xdata, ydata),
-          pyc_make_dict(2, PyString_FromString("label"), PyString_FromString("$f(x) = x")));
+  pyc_py_call(p, "plot",
+              pyc_make_tuple(2, xdata, ydata),
+              pyc_make_dict(2, PyString_FromString("label"), PyString_FromString("$f(x) = x")));
 
   //Corresponds to python calls matplotlib.pyplot.legend() and matplotlib.pyplot.show() respectively.
-  py_call(p, "legend", pyc_make_tuple(0), NULL);
-  py_call(p, "show", pyc_make_tuple(0), NULL);
+  pyc_py_call(p, "legend", pyc_make_tuple(0), NULL);
+  pyc_py_call(p, "show", pyc_make_tuple(0), NULL);
   
   //Clean up
-  free_py_module(p);
+  delete_py_module(p);
 }
 

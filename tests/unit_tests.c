@@ -34,8 +34,8 @@ int main(int argc, char *argv[]){
 
   //if the imports worked
   if (psys && pos && ptime){
-    PyObject *bad_call = py_call(psys, "foo", pyc_make_tuple(0), NULL);
-    PyObject *good_call = py_call(ptime, "clock", pyc_make_tuple(0), NULL);
+    PyObject *bad_call = pyc_py_call(psys, "foo", pyc_make_tuple(0), NULL);
+    PyObject *good_call = pyc_py_call(ptime, "clock", pyc_make_tuple(0), NULL);
 
     if (good_call && bad_call == NULL){
       return 0;

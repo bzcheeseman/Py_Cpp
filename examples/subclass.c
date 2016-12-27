@@ -31,17 +31,17 @@ int main(int argc, char *argv[]){
   //argument to the constructor.
 
   //Call the add function to check and be sure that the first import worked (if it didn't things would blow up here)
-  py_call(p, "add", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.2)), NULL);
+  pyc_py_call(p, "add", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.2)), NULL);
 
   //Now we want the class we defined in the script subclass.py
-  py_module *math = py_class(p, "math_ops", NULL, NULL);
-  
+  py_module *math = pyc_py_class(p, "math_ops", NULL, NULL);
+
   //And we call multiply from the sub class
-  py_call(math, "multiply", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.)), NULL); 
-  
+  pyc_py_call(math, "multiply", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.)), NULL);
+
   //Now clean up the memory and return!
-  free_py_module(math);
-  free_py_module(p);
+  delete_py_module(math);
+  delete_py_module(p);
 
   return 0;
 }
