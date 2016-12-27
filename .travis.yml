@@ -15,7 +15,8 @@ script:
   - cd examples; make
   - cd ../../tests/gtest; mkdir build; cd build; cmake ..; make
   - cd ../../../build/tests; make
-  - ./unit_tests_c; ./unit_tests
+  - ./unit_tests_c
+  - ./unit_tests
 os:
   - osx
   - linux
