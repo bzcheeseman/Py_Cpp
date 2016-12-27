@@ -13,9 +13,10 @@ addons:
 script:
   - mkdir build; cd build; cmake ..
   - cd examples; make
+  - ./hello_world; ./hello_world_c
+  - ./subclass; ./subclass_c
   - cd ../../tests/gtest; mkdir build; cd build; cmake ..; make
   - cd ../../../build/tests; make
-  - sudo pip install matplotlib
   - ./unit_tests_c; ./unit_tests
 compiler:
   - gcc
