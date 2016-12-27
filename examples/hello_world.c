@@ -38,5 +38,6 @@ int main(int argc, char *argv[]){
   if(retval){
     free_py_module(module);
   }
+
   return 0;
 }

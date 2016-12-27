@@ -149,7 +149,6 @@ void free_py_module(py_module* module){
   if (module){
     Py_XDECREF(module->me);
     close_log(module->log);
-    free(module);
   }
   Py_Finalize();
 }
