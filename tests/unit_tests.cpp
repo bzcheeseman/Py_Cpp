@@ -30,6 +30,10 @@ TEST(PyImport, BadImport) {
   EXPECT_THROW(pycpp::py_module module ("foo"), std::runtime_error);
 }
 
+TEST(PyImport, matplotlib){
+  EXPECT_NO_THROW(pycpp::py_module module ("matplotlib"));
+}
+
 TEST(PyImport, GoodImport){
   EXPECT_NO_THROW(pycpp::py_module module ("sys"));
   EXPECT_NO_THROW(pycpp::py_module module ("os"));
