@@ -11,20 +11,16 @@ addons:
       - g++-5
       - clang-3.6
 script:
-  - cd examples
-  - mkdir build; cd build
-  - cmake ..; make
-  - cd ../../tests/gtest
-  - mkdir build; cd build
-  - cmake ..; make
-  - cd ../..
-  - mkdir build; cd build
-  - cmake ..; make
+  - mkdir build; cd build; cmake ..
+  - cd examples; make
+  - ./*_c; ./*
+  - cd ../tests; make
+  - ./unit_tests_c; ./unit_tests
 compiler:
   - gcc
-  - clang
+#  - clang
 os:
-  - osx
+#  - osx
   - linux
 branches:
   only:

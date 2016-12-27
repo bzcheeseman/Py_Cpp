@@ -39,8 +39,12 @@
 
 //! Gives us a smart value for the home directory - again from the CMake source directory.
 #ifndef PYC_PY_HOME
-  #define PYC_PY_HOME ".."
+  #define PYC_PY_HOME "../.."
 #endif
+
+/*
+ * TODO: Implement an error struct like in hA?
+ */
 
 /**
  * @file include/py_module.h
@@ -51,16 +55,11 @@
  * py_module.hpp for guidance.
  */
 
-/*
- * TODO: make the subclass module work properly
- * TODO: finish documentation
- */
-
 /**
-   * Selects the python executable - this is important to choose right because the wrong choice can have grave
-   * consequences - a.k.a. things won't work.  If you're having trouble I recommend changing this first,
-   * especially if you used homebrew to get another python distribution alongside your system python.
-   */
+ * Selects the python executable - this is important to choose right because the wrong choice can have grave
+ * consequences - a.k.a. things won't work.  If you're having trouble I recommend changing this first,
+ * especially if you used homebrew to get another python distribution alongside your system python.
+ */
 char *pyc_which_python = PYC_WHICH_PYTHON;
 
 /**
@@ -69,13 +68,17 @@ char *pyc_which_python = PYC_WHICH_PYTHON;
  */
 char *pyc_python_home = PYC_PY_HOME;
 
-
+/**
+ * @struct py_module
+ * @brief Holds the PyObject that represents the module (or class) we've imported.
+ *
+ * Holds the module we imported (or class) as well as the logs for the module.  The logfiles are stored in
+ * the build folder. That can be changed but will require changing the names of the logfiles in each of their calls
+ * in this file.
+ */
 struct py_module{
   //! The PyObject that represents the object we're trying to import/call
   PyObject *me;
-
-  //! Whether or not this module is callable - we check on import and then leave it alone.
-  bool callable;
 
   //! Holds the logfiles for a module.
   logs_t *log;
@@ -120,7 +123,6 @@ py_module *new_py_module(const char *package, const char *py_home){
     setenv("PYTHONPATH", pyc_python_home, 1);
   }
 
-
   Py_SetProgramName(pyc_which_python);
 
   Py_Initialize();
@@ -135,7 +137,6 @@ py_module *new_py_module(const char *package, const char *py_home){
   to_log("imports.log", "Successful import of: ", newmodule->log);
   to_log("imports.log", package, newmodule->log);
 
-  newmodule->callable = check_callable(newmodule->me, newmodule->log);
   return newmodule;
 }
 
@@ -154,15 +155,15 @@ void free_py_module(py_module* module){
 }
 
 /**
-   * @brief Makes a PyTuple.
-   *
-   * Makes a python tuple for the purpose of passing arguments to a python function. All arguments to this function MUST
-   * be of type PyObject *
-   *
-   * @param num Number of arguments to the function
-   * @param ... Variable number of arguments of the type PyObject *
-   * @return A PyTuple that can be passed directly to py_call.
-   */
+ * @brief Makes a PyTuple.
+ *
+ * Makes a python tuple for the purpose of passing arguments to a python function. All arguments to this function MUST
+ * be of type PyObject *
+ *
+ * @param num Number of arguments to the function
+ * @param ... Variable number of arguments of the type PyObject *
+ * @return A PyTuple that can be passed directly to py_call.
+ */
 PyObject *pyc_make_tuple(int num, ...){
 
   if (num == 0){
@@ -214,48 +215,70 @@ PyObject *pyc_make_dict(int num, ...){
 }
 
 /**
+ * An example function that takes an array of doubles and makes a python list from that array.
+ *
+ * @param list C style array of doubles
+ * @param len Length of the input (and output array)
+ * @return PyObject that represents a python list of length len
+ */
+PyObject *pyc_make_list(double *list, size_t len){
+  PyObject *out = PyList_New(len);
+
+  for (size_t i = 0; i < len; i++){
+    PyList_SetItem(out, i, PyFloat_FromDouble(list[i]));
+  }
+
+  return out;
+}
+
+/**
  * Calls a python function directly from python. Use the pyc_make_dict and pyc_make_tuple functions to pass arguments
  * to this function.
  *
- * @param module
- * @param attr
- * @param args
- * @param kwargs
- * @return
+ * @param module The struct that holds the items we need to make a python call
+ * @param attr The function (attribute) we want to call from a module
+ * @param args The args to pass to the function as a PyTuple
+ * @param kwargs The keyword args to pass to the function as a PyDict
+ * @return The return value of the function call - conversion is up to the user
  */
 PyObject *py_call(py_module *module, const char *attr, PyObject *args, PyObject *kwargs){
-  assert(PyTuple_Check(args));
 
-  if (module){
+  assert(PyTuple_Check(args));
+  assert(kwargs == NULL || PyDict_Check(kwargs));
+
+  if (module) {
     PyObject *callable = PyObject_GetAttrString(module->me, attr);
 
-    check_callable(callable, module->log);
-
-    PyObject *retval;
-
-    if (kwargs == NULL){
-      retval = PyObject_Call(callable, args, NULL);
-    }
-    else if (PyDict_Check(kwargs)){
-      retval = PyObject_Call(callable, args, kwargs);
-    }
-    else{
-      to_log("object_call.log", "Error, kwargs not NULL or a PyDict", module->log);
-    }
     if (PyErr_Occurred()){
       PyErr_Print();
-      to_log("object_call.log", "Error during object call, attr: ", module->log);
-      to_log("object_call.log", attr, module->log);
+      return NULL;
     }
 
-    Py_CLEAR(args);
-    Py_CLEAR(callable);
-    if (kwargs){
-      PyDict_Clear(kwargs);
-      Py_CLEAR(kwargs);
-    }
+    if (check_callable(callable, module->log)) {
+      PyObject *retval;
 
-    return retval;
+      if (kwargs == NULL) {
+        retval = PyObject_Call(callable, args, NULL);
+      } else if (PyDict_Check(kwargs)) {
+        retval = PyObject_Call(callable, args, kwargs);
+      } else {
+        to_log("object_call.log", "Error, kwargs not NULL or a PyDict", module->log);
+      }
+      if (PyErr_Occurred()) {
+        PyErr_Print();
+        to_log("object_call.log", "Error during object call, attr: ", module->log);
+        to_log("object_call.log", attr, module->log);
+      }
+
+      Py_CLEAR(args);
+      Py_CLEAR(callable);
+      if (kwargs) {
+        PyDict_Clear(kwargs);
+        Py_CLEAR(kwargs);
+      }
+
+      return retval;
+    }
   }
   else{
     return NULL;
@@ -263,26 +286,27 @@ PyObject *py_call(py_module *module, const char *attr, PyObject *args, PyObject 
 }
 
 /**
- * Imports a class from a module. NOT WORKING YET
+ * Imports a class from a module.
  *
- * @param module
- * @param klass
- * @param args
- * @param kwargs
- * @return
+ * @param module The overall module (or file) already imported
+ * @param klass The submodule (or class) to import
+ * @param args Arguments to pass to class constructor
+ * @param kwargs Keyword arguments to pass to the class constructor
+ * @return A new py_module with the imported class contained within it.
  */
 py_module *py_class(py_module *module, const char *klass, PyObject *args, PyObject *kwargs){
 
   assert(args == NULL || PyTuple_Check(args));
   assert(kwargs == NULL || PyDict_Check(kwargs));
 
-  py_module *out;
+  //setup the new output module
+  py_module *out = malloc(sizeof(py_module));
+  out->log = new_logs();
 
-  printf("%s\n", PyString_AsString(PyObject_Repr(module->me)));
   out->me = PyInstance_New( //creates a new instance of a class
           PyObject_GetAttr(module->me, PyString_FromString(klass)), //choose the class
-          args, //pass args/kwargs
-          kwargs);
+          args, //pass args
+          kwargs); //pass kwargs
 
   if (PyErr_Occurred()){
     PyErr_Print();

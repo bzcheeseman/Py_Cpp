@@ -24,18 +24,24 @@
 #include "../include/py_module.h"
 
 int main(int argc, char *argv[]){
-  pyc_which_python = "/usr/local/bin/python";
 
-  py_module *p = new_py_module("subclass", "../../examples"); //Standard import of user-defined file, remember that it's running from
-  //examples/build so we need to tell it to add one directory up to the Python path.
+  py_module *p = new_py_module("subclass", "../../examples"); //Standard import of user-defined file.
+  //Remember it's running from Py_Cpp/build/examples so we need to tell it to import from the right directory.
   //This shows the other way to select the python home - pass it as an
   //argument to the constructor.
 
-  py_call(p, "add", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.2)), NULL); //Call the add function to check and be sure that works
+  //Call the add function to check and be sure that the first import worked (if it didn't things would blow up here)
+  py_call(p, "add", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.2)), NULL);
 
-  //segfaults here for some reason
-  py_module *math = py_class(p, "math_ops", NULL, NULL); //Now we want the class we defined in the script subclass.py
-  py_call(math, "multiply", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.)), NULL); //And we call multiply to make sure that works.
+  //Now we want the class we defined in the script subclass.py
+  py_module *math = py_class(p, "math_ops", NULL, NULL);
+  
+  //And we call multiply from the sub class
+  py_call(math, "multiply", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.)), NULL); 
+  
+  //Now clean up the memory and return!
+  free_py_module(math);
+  free_py_module(p);
 
   return 0;
 }

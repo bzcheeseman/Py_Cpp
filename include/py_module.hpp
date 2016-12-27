@@ -50,7 +50,7 @@
 
 //! Gives us a smart value for the home directory - again from the CMake source directory.
 #ifndef PYCPP_PY_HOME
-  #define PYCPP_PY_HOME ".."
+  #define PYCPP_PY_HOME "../.."
 #endif
 
 namespace pycpp {

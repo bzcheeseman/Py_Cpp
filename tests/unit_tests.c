@@ -1,5 +1,5 @@
 //
-// Created by Aman LaChapelle on 11/22/16.
+// Created by Aman LaChapelle on 12/27/16.
 //
 // Project
 // Copyright (c) 2016 Aman LaChapelle
@@ -21,22 +21,26 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-
-#include "../include/py_module.hpp"
+#include "../include/py_module.h"
 
 int main(int argc, char *argv[]){
 
-  pycpp::py_module p ("subclass", "../../examples"); //Standard import of user-defined file, remember that it's running from
-  //Py_Cpp/build/examples so we need to tell it to add one directory up to the Python path.
-  //This shows the other way to select the python home - pass it as an argument to the constructor.
+  pyc_which_python = "/usr/local/bin/python";
 
-  p("add", 2, pycpp::to_python(1.1), pycpp::to_python(2.2)); //Call the add function to check and be sure that works
+  //import testing
+  py_module *psys = new_py_module("sys", NULL);
+  py_module *pos = new_py_module("os", NULL);
+  py_module *ptime = new_py_module("time", NULL);
 
+  //if the imports worked
+  if (psys && pos && ptime){
+    PyObject *bad_call = py_call(psys, "foo", pyc_make_tuple(0), NULL);
+    PyObject *good_call = py_call(ptime, "clock", pyc_make_tuple(0), NULL);
 
-  pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
-  math("multiply", 2, pycpp::to_python(1.1), pycpp::to_python(2.)); //And we call multiply to make sure that works.
+    if (good_call && bad_call == NULL){
+      return 0;
+    }
+  }
 
-  return 0;
-
+  return 1;
 }

@@ -35,11 +35,6 @@ functionality of the library, along with giving examples on how to use it.
 Currently the tests only test basic functionality of the library - the examples compiling and running are
 excellent indicators of the library working the way it should.
 
-I'm still working through some silly things with the tests - the examples show that we can include 
-user-defined scripts but the gtest `TEST` doesn't pass for some reason...
-Until I figure out what's wrong with it I'm going to simply not include that test, though I'll leave it in 
-the file, just comment it out.
-
 ## Using the library
 Py_Cpp is header-only (and I don't want to change this in the future), so just 
 include `py_module.hpp` and use it to your heart's content! It's important to note that you can change

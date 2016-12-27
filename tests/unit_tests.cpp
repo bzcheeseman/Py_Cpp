@@ -45,11 +45,6 @@ TEST(PyImport, BadUserImport){
   EXPECT_ANY_THROW(pycpp::py_module module ("hello_world"));
 }
 
-//TEST(PyImport, GoodUserImport){ //this doesn't work for some reason...
-//  pycpp::python_home += "/scripts";
-//  EXPECT_NO_THROW(pycpp::py_module module ("hello_world"));
-//}
-
 TEST(PyCall, BadAttr){
   pycpp::py_module module ("sys");
   EXPECT_DEATH(module("foo", 0), "Assertion failed");
