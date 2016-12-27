@@ -35,12 +35,8 @@ int main(int argc, char *argv[]){
   //C++ data of some form
   double data[4] = {1.,2.,3.,4.};
 
-  PyObject *xdata = PyList_New(4);
-  PyObject *ydata = PyList_New(4);
-  for (int i = 0; i < 4; i++){
-    PyList_SetItem(xdata, i, PyFloat_FromDouble(data[i]));
-    PyList_SetItem(ydata, i, PyFloat_FromDouble(data[i]));
-  }
+  PyObject *xdata = pyc_make_list(data, 4);
+  PyObject *ydata = pyc_make_list(data, 4);
 
   //Call the python module you want to call - make sure you take all the data to python via calls to to_python. The
   //arguments to a function are a python tuple (make_tuple) while the keyword arguments are a python dictionary (make_dict).
