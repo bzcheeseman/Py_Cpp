@@ -16,7 +16,7 @@ cmake >= 3.0
 ```
 
 If you're on MacOSX and use Homebrew AND you have a brewed version of Python installed, make sure 
-you link to the correct `libpython`, you should find yours in `/usr/local/Frameworks/Python.framework/Versions/Current/lib/libpython2.7.dylib`
+you link to the correct `libpython`, you should find yours in `/usr/local/Frameworks/Python.framework/Versions/<your_version>/lib`
 
 ## Compiling Tests and Examples
 ```
