@@ -34,6 +34,11 @@ int main(int argc, char *argv[]){
 
   p("hello", 0); //And this just calls the function 'hello' from that script.
 
+  //Demonstrating the from_python functionality - all the from_python functions work just like this.
+  std::string r = pycpp::from_python<std::string>(p("retHello", 0)).result;
+  std::cout << r << std::endl;
+
+
   return 0;
 }
 

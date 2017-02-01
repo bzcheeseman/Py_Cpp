@@ -36,13 +36,14 @@ TEST(PyImport, matplotlib){
 
 TEST(PyImport, GoodImport){
   EXPECT_NO_THROW(pycpp::py_module module ("sys"));
-  EXPECT_NO_THROW(pycpp::py_module module ("os"));
-  EXPECT_NO_THROW(pycpp::py_module module ("time"));
-  EXPECT_NO_THROW(pycpp::py_module module ("socket"));
 }
 
 TEST(PyImport, BadUserImport){
   EXPECT_ANY_THROW(pycpp::py_module module ("hello_world"));
+}
+
+TEST(PyImport, GoodUserImport){
+  EXPECT_NO_THROW(pycpp::py_module module ("hello_world", "../../examples"));
 }
 
 TEST(PyCall, BadAttr){

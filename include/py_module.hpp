@@ -189,6 +189,119 @@ namespace pycpp {
   }
 
   /**
+   * @brief Interface for passing functions back from Python.
+   *
+   * Will return C++ integral types, as well as vectors of integral types. C-style arrays can then be gotten by calling
+   * <vector>.data() on the result.
+   *
+   * @tparam T Type of the object to be extracted from Python.
+   */
+  template<typename T>
+  struct from_python {
+    T result;
+  };
+
+  //! String specialization
+  template<> struct from_python<std::string> {
+    from_python(PyObject *pyObj): result(PyString_AsString(pyObj)) {}
+    std::string result;
+  };
+
+  //! Int specialization
+  template<> struct from_python<int> {
+    from_python(PyObject *pyObj): result((int)PyInt_AsLong(pyObj)) {}
+    int result;
+  };
+
+  //! Long specialization
+  template<> struct from_python<long> {
+    from_python(PyObject *pyObj): result(PyInt_AsLong(pyObj)) {}
+    long result;
+  };
+
+  //! Float specialization
+  template<> struct from_python<float> {
+    from_python(PyObject *pyObj): result((float)PyFloat_AsDouble(pyObj)) {}
+    float result;
+  };
+
+  //! Double specialization
+  template<> struct from_python<double> {
+    from_python(PyObject *pyObj): result(PyFloat_AsDouble(pyObj)) {}
+    double result;
+  };
+
+  //! String vector specialization
+  template<> struct from_python<std::vector<std::string>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back(PyString_AsString(item));
+      }
+    }
+    std::vector<std::string> result;
+  };
+
+  //! Int vector specialization
+  template<> struct from_python<std::vector<int>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back((int)PyInt_AsLong(item));
+      }
+    }
+    std::vector<int> result;
+  };
+
+  //! Long vector specialization
+  template<> struct from_python<std::vector<long>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back(PyInt_AsLong(item));
+      }
+    }
+    std::vector<long> result;
+  };
+
+  //! Float vector specialization
+  template<> struct from_python<std::vector<float>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back((float)PyFloat_AsDouble(item));
+      }
+    }
+    std::vector<float> result;
+  };
+
+  //! Double vector specialization
+  template<> struct from_python<std::vector<double>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back(PyFloat_AsDouble(item));
+      }
+    }
+    std::vector<double> result;
+  };
+
+  /**
    * @brief Makes a PyTuple.
    *
    * Makes a python tuple for the purpose of passing arguments to a python function. All arguments to this function MUST
@@ -378,7 +491,7 @@ namespace pycpp {
      * @param num Number of PyObject * arguments being passed to the function.
      * @return The return value of the function as a PyObject *.  It is left to the user to convert that back to C++.
      */
-    inline PyObject *operator()(const std::string attr, int num, ...){
+    inline PyObject *operator()(const std::string attr, int num, ...) {
 
       va_list cpp_args;
       va_start(cpp_args, num);

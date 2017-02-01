@@ -7,6 +7,8 @@ int main() {
   pycpp::which_python = "/usr/local/bin/ipython"; //Note that matplotlib prefers ipython if you have a brewed python
                                                   //on your system.
 
+  //matplotlib is picky - gotta make sure the backend is right, make sure to change the backend to something appropriate.
+  setenv("MPLBACKEND", "TkAgg", 1);
   //Choose a module to import
   pycpp::py_module p ("matplotlib.pyplot");
 

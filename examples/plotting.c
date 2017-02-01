@@ -27,7 +27,7 @@ int main(int argc, char *argv[]){
   pyc_which_python = "/usr/local/bin/ipython"; //Note that matplotlib prefers brewed python if you have it
   //on your system.
 
-  //matplotlib is picky in C - gotta make sure the backend is right
+  //matplotlib is picky - gotta make sure the backend is right
   setenv("MPLBACKEND", "TkAgg", 1);
   //Choose a module to import
   py_module *p = new_py_module("matplotlib.pyplot", pyc_python_home);
