@@ -32,12 +32,12 @@ int main(int argc, char *argv[]){
   //This shows the other way to select the python home - pass it as an argument to the constructor.
 
   //Call the add function to check and be sure that works - both return and print
-  float result = pycpp::from_python<float>(p("add", 2, pycpp::to_python(1.1), pycpp::to_python(2.2))).result;
+  float result = pycpp::from_python<float>(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)})).result;
   std::cout << result << std::endl;
 
 
   pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
-  result = pycpp::from_python<float>(math("multiply", 2, pycpp::to_python(1.1), pycpp::to_python(2.))).result; //And we call multiply to make sure that works.
+  result = pycpp::from_python<float>(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)})).result; //And we call multiply to make sure that works.
   std::cout << result << std::endl;
 
   return 0;
