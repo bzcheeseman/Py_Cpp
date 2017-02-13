@@ -31,6 +31,7 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+#include <type_traits>
 
 /**
  * @todo: get windows build working?
@@ -189,31 +190,140 @@ namespace pycpp {
   }
 
   /**
+   * @brief Interface for passing functions back from Python.
+   *
+   * Will return C++ integral types, as well as vectors of integral types. C-style arrays can then be gotten by calling
+   * <vector>.data() on the result.
+   *
+   * @tparam T Type of the object to be extracted from Python.
+   */
+  template<typename T>
+  struct from_python {
+    T result;
+  };
+
+  //! String specialization
+  template<> struct from_python<std::string> {
+    from_python(PyObject *pyObj): result(PyString_AsString(pyObj)) {}
+    std::string result;
+  };
+
+  //! Int specialization
+  template<> struct from_python<int> {
+    from_python(PyObject *pyObj): result((int)PyInt_AsLong(pyObj)) {}
+    int result;
+  };
+
+  //! Long specialization
+  template<> struct from_python<long> {
+    from_python(PyObject *pyObj): result(PyInt_AsLong(pyObj)) {}
+    long result;
+  };
+
+  //! Float specialization
+  template<> struct from_python<float> {
+    from_python(PyObject *pyObj): result((float)PyFloat_AsDouble(pyObj)) {}
+    float result;
+  };
+
+  //! Double specialization
+  template<> struct from_python<double> {
+    from_python(PyObject *pyObj): result(PyFloat_AsDouble(pyObj)) {}
+    double result;
+  };
+
+  //! String vector specialization
+  template<> struct from_python<std::vector<std::string>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back(PyString_AsString(item));
+      }
+    }
+    std::vector<std::string> result;
+  };
+
+  //! Int vector specialization
+  template<> struct from_python<std::vector<int>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back((int)PyInt_AsLong(item));
+      }
+    }
+    std::vector<int> result;
+  };
+
+  //! Long vector specialization
+  template<> struct from_python<std::vector<long>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back(PyInt_AsLong(item));
+      }
+    }
+    std::vector<long> result;
+  };
+
+  //! Float vector specialization
+  template<> struct from_python<std::vector<float>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back((float)PyFloat_AsDouble(item));
+      }
+    }
+    std::vector<float> result;
+  };
+
+  //! Double vector specialization
+  template<> struct from_python<std::vector<double>> {
+    from_python(PyObject *pyObj){
+      PyList_Check(pyObj);
+      size_t len = PyList_Size(pyObj);
+      PyObject *item;
+      for (size_t i = 0; i < len; i++){
+        PyList_GetItem(item, i);
+        result.push_back(PyFloat_AsDouble(item));
+      }
+    }
+    std::vector<double> result;
+  };
+
+  /**
    * @brief Makes a PyTuple.
    *
    * Makes a python tuple for the purpose of passing arguments to a python function. All arguments to this function MUST
-   * be of type PyObject * as follows: make_tuple(2, pycpp::to_python(<value_1>), pycpp::to_python(<value_2>))
+   * be of type PyObject * as follows: make_tuple({pycpp::to_python(<value_1>), pycpp::to_python(<value_2>)})
    *
-   * @param num Number of arguments to the function
-   * @param ... Variable number of arguments of the type PyObject *
+   * @param l The initializer list of arguments to be put into the tuple.
    * @return A PyTuple that can be passed directly to the py_module operator() call.
    */
-  inline PyObject *make_tuple(int num, ...){
+  inline PyObject *make_tuple(std::initializer_list<PyObject *> l){
+
+    int num = l.size();
 
     if (num == 0){
       return PyTuple_Pack(0);
     }
 
-    va_list args;
-    va_start(args, num);
-
     PyObject *out = PyTuple_New(num);
 
     for (int i = 0; i < num; i++){
-      PyTuple_SetItem(out, i, va_arg(args, PyObject *));
+      PyTuple_SetItem(out, i, *(l.begin()+i));
     }
-
-    va_end(args);
 
     return out;
   }
@@ -222,28 +332,26 @@ namespace pycpp {
    * @brief Makes a PyDict
    *
    * Makes a python dictionary for the purpose of passing keyword arguments. Note that the order of
-   * arguments is as follows: make_dict(2*n, pycpp::to_python("key_n"), pycpp::to_python(<value_n>)) where
+   * arguments is as follows: make_dict({pycpp::to_python("key_n"), pycpp::to_python(<value_n>)}) where
    * n is the total number of key-value PAIRS.
    *
-   * @param num Number of arguments to the function
-   * @param ... Variable number of arguments of type PyObject *
+   * @param l The initializer_list of key-value pairs.
    * @return A PyDict that can be passed directly to the py_module operator() call.
    */
-  inline PyObject *make_dict(int num, ...){
+  inline PyObject *make_dict(std::initializer_list<PyObject *> l){
+    assert(l.size()%2 == 0);
+
+    int num = l.size();
+
     if (num == 0){
       return nullptr;
     }
 
-    va_list args;
-    va_start(args, num);
-
     PyObject *out = PyDict_New();
 
     for (int i = 0; i < num; i+=2){
-      PyDict_SetItem(out, va_arg(args, PyObject *), va_arg(args, PyObject *));
+      PyDict_SetItem(out, *(l.begin()+i), *(l.begin()+i+1));
     }
-
-    va_end(args);
 
     return out;
   }
@@ -274,31 +382,6 @@ namespace pycpp {
     }
 
     /**
-     * Makes a tuple like the pycpp::make_tuple function but it's meant for internal use as it takes a va_list of
-     * arguments.  Makes the operator() function nicer.
-     *
-     * @param num Number of arguments
-     * @param args va_list of arguments - already called va_start on the va_list being passed to this function.
-     * @return A PyTuple that will be passed as the argument list to the python function being called.
-     */
-    inline PyObject *make_tuple(int num, va_list args){
-
-      if (num == 0){
-        return PyTuple_Pack(0);
-      }
-
-      PyObject *out = PyTuple_New(num);
-
-      for (int i = 0; i < num; i++){
-        PyTuple_SetItem(out, i, va_arg(args, PyObject *));
-      }
-
-      va_end(args);
-
-      return out;
-    }
-
-    /**
      * Default constructor - used internally only to make sure everything is working properly.
      */
     py_module(){};
@@ -323,7 +406,7 @@ namespace pycpp {
 
       Py_Initialize();
 
-      me = PyImport_Import(pycpp::to_python(package.c_str()));
+      me = PyImport_Import(to_python(package));
       if (PyErr_Occurred()){
         PyErr_Print();
         throw std::runtime_error("Unable to import package");
@@ -372,18 +455,15 @@ namespace pycpp {
     /**
      * Given a string that is exactly a member function of a python module, calls that function with the given arguments
      * as the function's args tuple.  Creates a tuple of the arguments so that the function call can look like this:
-     * <py_module>("<function>", 2, pycpp::to_python("string"), pycpp::to_python(<value>))
+     * <py_module>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
      *
      * @param attr String that is exactly the name of a member function of the python module initialized.
-     * @param num Number of PyObject * arguments being passed to the function.
+     * @param l The initializer list of PyObject * types that make up the args of the function
      * @return The return value of the function as a PyObject *.  It is left to the user to convert that back to C++.
      */
-    inline PyObject *operator()(const std::string attr, int num, ...){
+    inline PyObject *operator()(const std::string attr, std::initializer_list<PyObject *> l) {
 
-      va_list cpp_args;
-      va_start(cpp_args, num);
-
-      PyObject *args = this->make_tuple(num, cpp_args);
+      PyObject *args = pycpp::make_tuple(l);
 
       PyObject *callable = PyObject_GetAttrString(me, attr.c_str());
 
@@ -415,7 +495,7 @@ namespace pycpp {
       py_module out;
 
       out.me = PyInstance_New( //creates a new instance of a class
-              PyObject_GetAttr(this->me, to_python(klass.c_str())), //choose the class
+              PyObject_GetAttr(this->me, to_python(klass)), //choose the class
               args, //pass args/kwargs
               kwargs);
 

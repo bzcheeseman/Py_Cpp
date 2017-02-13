@@ -32,7 +32,12 @@ int main(int argc, char *argv[]){
 
   pycpp::py_module p ("hello_world"); //This is a python script that I wrote in hello_world.py
 
-  p("hello", 0); //And this just calls the function 'hello' from that script.
+  p("hello", {}); //And this just calls the function 'hello' from that script.
+
+  //Demonstrating the from_python functionality - all the from_python functions work just like this.
+  std::string r = pycpp::from_python<std::string>(p("retHello", {})).result;
+  std::cout << r << std::endl;
+
 
   return 0;
 }

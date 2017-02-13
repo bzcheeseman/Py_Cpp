@@ -28,14 +28,17 @@
 int main(int argc, char *argv[]){
 
   pycpp::py_module p ("subclass", "../../examples"); //Standard import of user-defined file, remember that it's running from
-  //Py_Cpp/build/examples so we need to tell it to add one directory up to the Python path.
+  //Py_Cpp/build/examples so we need to tell it to add two directories up to the Python path.
   //This shows the other way to select the python home - pass it as an argument to the constructor.
 
-  p("add", 2, pycpp::to_python(1.1), pycpp::to_python(2.2)); //Call the add function to check and be sure that works
+  //Call the add function to check and be sure that works - both return and print
+  float result = pycpp::from_python<float>(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)})).result;
+  std::cout << result << std::endl;
 
 
   pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
-  math("multiply", 2, pycpp::to_python(1.1), pycpp::to_python(2.)); //And we call multiply to make sure that works.
+  result = pycpp::from_python<float>(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)})).result; //And we call multiply to make sure that works.
+  std::cout << result << std::endl;
 
   return 0;
 
