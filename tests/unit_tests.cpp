@@ -26,34 +26,30 @@
 #include "../include/py_module.hpp"
 //#include "../include/py_module.h"
 
-TEST(PyImport, BadImport) {
-  EXPECT_THROW(pycpp::py_module module ("foo"), std::runtime_error);
+TEST(import, pycpp_import){
+  EXPECT_NO_THROW(pycpp::py_module hello ("hello_world", "../../examples"));
 }
 
-TEST(PyImport, matplotlib){
-  EXPECT_NO_THROW(pycpp::py_module module ("matplotlib"));
+TEST(helloworld, pycpp_examples){
+  pycpp::py_module hello ("hello_world", "../../examples");
+
+  EXPECT_NO_THROW(hello("hello"));
+  std::cout << std::endl;
+  EXPECT_EQ(hello.call<std::string>("retHello").compare("Hello, World!"), 0);
 }
 
-TEST(PyImport, GoodImport){
-  EXPECT_NO_THROW(pycpp::py_module module ("sys"));
-}
+TEST(subclass, pycpp_examples){
+  pycpp::py_module p ("subclass", "../../examples");
 
-TEST(PyImport, BadUserImport){
-  EXPECT_ANY_THROW(pycpp::py_module module ("hello_world"));
-}
+  float result1 = pycpp::from_python<float>(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)})).result;
+  EXPECT_EQ(result1, 3.3f);
 
-TEST(PyImport, GoodUserImport){
-  EXPECT_NO_THROW(pycpp::py_module module ("hello_world", "../../examples"));
-}
+  pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
+  float result2 = pycpp::from_python<float>(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)})).result; //And we call multiply to make sure that works.
+  EXPECT_EQ(result2, 2.2f);
 
-TEST(PyCall, BadAttr){
-  pycpp::py_module module ("sys");
-  EXPECT_ANY_THROW(module("foo", 0));
-}
-
-TEST(PyCall, NotCallable){
-  pycpp::py_module module ("os");
-  EXPECT_ANY_THROW(module("environ", 0));
+  float result3 = math.call<float>("multiply", {pycpp::to_python(1.1), pycpp::to_python(4.)});
+  EXPECT_EQ(result3, 4.4f);
 }
 
 int main(int argc, char **argv) {

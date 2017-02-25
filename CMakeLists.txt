@@ -13,5 +13,3 @@ if(DOXYGEN_FOUND)
             COMMENT "Generating API documentation with Doxygen" VERBATIM
             )
 endif(DOXYGEN_FOUND)
-
-#add_subdirectory(testing) # delete this for commits
