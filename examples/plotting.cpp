@@ -18,16 +18,16 @@ int main() {
   //Call the python module you want to call - make sure you take all the data to python via calls to to_python. The
   //arguments to a function are a python tuple (make_tuple) while the keyword arguments are a python dictionary (make_dict).
   p("plot",
-    pycpp::make_tuple({pycpp::to_python(data), pycpp::to_python(data)}), //arguments
-    pycpp::make_dict({pycpp::to_python("label"), pycpp::to_python("$f(x) = x$")}) //keyword arguments
+    {pycpp::to_python(data), pycpp::to_python(data)}, //arguments
+    {pycpp::to_python("label"), pycpp::to_python("$f(x) = x$")} //keyword arguments
   );
 
-  //Do the same as above with only arguments - keyword arguments don't work with this interface.
+  //Do the same as above with another format
   p("plot", {pycpp::to_python(data), pycpp::to_python(data), pycpp::to_python("o")});
 
   //Corresponds to python calls matplotlib.pyplot.legend() and matplotlib.pyplot.show() respectively.
-  p("legend", {});
-  p("show", {});
+  p("legend");
+  p("show");
 
   return 0;
 }

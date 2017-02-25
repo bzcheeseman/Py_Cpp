@@ -40,6 +40,11 @@ int main(int argc, char *argv[]){
   result = pycpp::from_python<float>(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)})).result; //And we call multiply to make sure that works.
   std::cout << result << std::endl;
 
+  //There's another way to get the C++ value from python - an templated call function. It's not an operator() call
+  //because you need to template it anyway, so I decided it might just be better to have a function name.
+  result = math.call<float>("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)});
+  std::cout << result << std::endl;
+
   return 0;
 
 }

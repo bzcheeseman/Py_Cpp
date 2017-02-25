@@ -15,6 +15,7 @@ script:
   - cd examples; make
   - cd ../../tests/gtest; mkdir build; cd build; cmake ..; make
   - cd ../../../build/tests; make
+  - ./unit_tests
 compiler:
   - gcc
   - clang
