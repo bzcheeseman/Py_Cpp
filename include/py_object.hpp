@@ -35,7 +35,7 @@
 #include <type_traits>
 
 /**
- * @todo: get windows build working?
+ * @todo: update docs
  */
 
 /**
@@ -45,7 +45,7 @@
  * to python are here.
  */
 
-//! This allows us to use the python interpreter that CMake finds.
+//! This allows us to use the python interpreter that CMake finds or overload it
 #ifndef PYCPP_WHICH_PYTHON
   #define PYCPP_WHICH_PYTHON "/usr/local/bin/ipython"
 #endif

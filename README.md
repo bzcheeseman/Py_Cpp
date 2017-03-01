@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/bzcheeseman/Py_Cpp.svg?branch=master)](https://travis-ci.org/bzcheeseman/Py_Cpp)
 
-I wrote this library because I found myself constantly needing to call python functions 
+I wrote this library because I found myself needing to call python functions 
 from my C++ applications, specifically for plotting but it can be used for other things.
 I tried to write it in such a way that's it's clear and self-explanatory - anything that isn't
 clear I'd be happy to change or document better (of course pull requests are always welcome too)!
@@ -38,7 +38,7 @@ into the repo so that this library has no dependencies other than those listed.
 
 ## Using the library - C++
 Py_Cpp is header-only (and I don't want to change this in the future), so just 
-include `py_module.hpp` and use it to your heart's content! It's important to note that you can change
+include `py_object.hpp` and use it to your heart's content! It's important to note that you can change
 which python interpreter you're using, and you can set that with the `pycpp::which_python` variable. This
 is especially important if you have a version of python installed via homebrew (or something) that is different
 from your system python because using the wrong interpreter can cause major and confusing problems.
@@ -51,7 +51,7 @@ so that you don't have to set it more than once, but I kept the other functional
 If you don't want to specify a new directory for the import just don't add in that argument to the function.
 
 ## Using the library - C
-Again, this library is header-only so simply include `py_module.h` and have at it. Since C has no namespaces
+Again, this library is header-only so simply include `py_object.h` and have at it. Since C has no namespaces
 all functions are prefaced with `pyc_`, so be sure to take a look at the examples to get the call interface.
 Since C lacks function overloading, I left the type conversion to Python up to the user. 
 In general, the C++ interface has more to it and it's a little cleaner (plus it's nice to use an OO language
@@ -87,7 +87,7 @@ endif ()
 message("${PYTHON_INCLUDE_DIR}")
 message("${PYTHON_LIBRARY}")
 
-add_executable(<your project name> <your project files> include/py_module.hpp)
+add_executable(<your project name> <your project files> include/py_object.hpp)
 target_link_libraries(<your project name> ${PYTHON_LIBRARY})
 ```
 
@@ -120,7 +120,7 @@ endif ()
 message("${PYTHON_INCLUDE_DIR}")
 message("${PYTHON_LIBRARY}")
 
-add_executable(<your project name> <your project files> include/py_module.h)
+add_executable(<your project name> <your project files> include/py_object.h)
 target_link_libraries(<your project name> ${PYTHON_LIBRARY})
 ```
 
