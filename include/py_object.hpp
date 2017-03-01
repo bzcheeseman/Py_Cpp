@@ -39,7 +39,7 @@
  */
 
 /**
- * @file include/py_module.hpp
+ * @file include/py_object.hpp
  *
  * Holds the pycpp namespace. All the methods and functions related to importing Python modules and converting C++ values
  * to python are here.
@@ -57,7 +57,7 @@
 
 namespace pycpp {
 
-  class py_module;
+  class py_object;
 
   /**
    * Selects the python executable - this is important to choose right because the wrong choice can have grave
@@ -71,8 +71,6 @@ namespace pycpp {
    * However this is easily changed by calling pycpp::python_home = "path/to/script".
    */
   static std::string python_home = PYCPP_PY_HOME;
-
-  static std::map<std::string, py_module> globals;
 
   /**
    * @brief Takes a vector to a python list.
@@ -344,117 +342,84 @@ namespace pycpp {
     return PyString_FromString(str);
   }
 
-  /**
-   * @brief Interface for passing functions back from Python.
-   *
-   * Will return C++ integral types, as well as vectors of integral types. C-style arrays can then be gotten by calling
-   * <vector>.data() on the result.
-   *
-   * @tparam T Type of the object to be extracted from Python.
-   */
-  template<typename T>
-  struct from_python {
-    T result;
-  };
-
   //! String specialization
-  template<> struct from_python<std::string> {
-    from_python(PyObject *pyObj): result(PyString_AsString(pyObj)) {}
-    std::string result;
+  void from_python(PyObject *pyobj, std::string &cppobj) {
+    cppobj = std::string(PyString_AsString(pyobj));
   };
 
   //! Int specialization
-  template<> struct from_python<int> {
-    from_python(PyObject *pyObj): result((int)PyInt_AsLong(pyObj)) {}
-    int result;
+  void from_python(PyObject *pyobj, int &cppobj) {
+    cppobj = (int) PyInt_AsLong(pyobj);
   };
 
   //! Long specialization
-  template<> struct from_python<long> {
-    from_python(PyObject *pyObj): result(PyInt_AsLong(pyObj)) {}
-    long result;
+  void from_python(PyObject *pyobj, long &cppobj) {
+    cppobj = PyInt_AsLong(pyobj);
   };
 
   //! Float specialization
-  template<> struct from_python<float> {
-    from_python(PyObject *pyObj): result((float)PyFloat_AsDouble(pyObj)) {}
-    float result;
+  void from_python(PyObject *pyobj, float &cppobj) {
+    cppobj = (float) PyFloat_AsDouble(pyobj);
   };
 
   //! Double specialization
-  template<> struct from_python<double> {
-    from_python(PyObject *pyObj): result(PyFloat_AsDouble(pyObj)) {}
-    double result;
+  void from_python(PyObject *pyobj, double &cppobj) {
+    cppobj = PyFloat_AsDouble(pyobj);
   };
 
   //! String vector specialization
-  template<> struct from_python<std::vector<std::string>> {
-    from_python(PyObject *pyObj){
-      PyList_Check(pyObj);
-      size_t len = PyList_Size(pyObj);
-      PyObject *item;
-      for (size_t i = 0; i < len; i++){
-        PyList_GetItem(item, i);
-        result.push_back(PyString_AsString(item));
-      }
+  void from_python(PyObject *pyobj, std::vector<std::string> &cppobj) {
+    PyList_Check(pyobj);
+    size_t len = PyList_Size(pyobj);
+    PyObject *item;
+    for (size_t i = 0; i < len; i++){
+      PyList_GetItem(item, i);
+      cppobj.push_back(PyString_AsString(item));
     }
-    std::vector<std::string> result;
   };
 
   //! Int vector specialization
-  template<> struct from_python<std::vector<int>> {
-    from_python(PyObject *pyObj){
-      PyList_Check(pyObj);
-      size_t len = PyList_Size(pyObj);
-      PyObject *item;
-      for (size_t i = 0; i < len; i++){
-        PyList_GetItem(item, i);
-        result.push_back((int)PyInt_AsLong(item));
-      }
+  void from_python(PyObject *pyobj, std::vector<int> &cppobj) {
+    PyList_Check(pyobj);
+    size_t len = PyList_Size(pyobj);
+    PyObject *item;
+    for (size_t i = 0; i < len; i++){
+      PyList_GetItem(item, i);
+      cppobj.push_back((int)PyInt_AsLong(item));
     }
-    std::vector<int> result;
   };
 
   //! Long vector specialization
-  template<> struct from_python<std::vector<long>> {
-    from_python(PyObject *pyObj){
-      PyList_Check(pyObj);
-      size_t len = PyList_Size(pyObj);
-      PyObject *item;
-      for (size_t i = 0; i < len; i++){
-        PyList_GetItem(item, i);
-        result.push_back(PyInt_AsLong(item));
-      }
+  void from_python(PyObject *pyobj, std::vector<long> &cppobj) {
+    PyList_Check(pyobj);
+    size_t len = PyList_Size(pyobj);
+    PyObject *item;
+    for (size_t i = 0; i < len; i++){
+      PyList_GetItem(item, i);
+      cppobj.push_back(PyInt_AsLong(item));
     }
-    std::vector<long> result;
   };
 
   //! Float vector specialization
-  template<> struct from_python<std::vector<float>> {
-    from_python(PyObject *pyObj){
-      PyList_Check(pyObj);
-      size_t len = PyList_Size(pyObj);
-      PyObject *item;
-      for (size_t i = 0; i < len; i++){
-        PyList_GetItem(item, i);
-        result.push_back((float)PyFloat_AsDouble(item));
-      }
+  void from_python(PyObject *pyobj, std::vector<float> &cppobj) {
+    PyList_Check(pyobj);
+    size_t len = PyList_Size(pyobj);
+    PyObject *item;
+    for (size_t i = 0; i < len; i++){
+      PyList_GetItem(item, i);
+      cppobj.push_back((float)PyFloat_AsDouble(item));
     }
-    std::vector<float> result;
   };
 
   //! Double vector specialization
-  template<> struct from_python<std::vector<double>> {
-    from_python(PyObject *pyObj){
-      PyList_Check(pyObj);
-      size_t len = PyList_Size(pyObj);
-      PyObject *item;
-      for (size_t i = 0; i < len; i++){
-        PyList_GetItem(item, i);
-        result.push_back(PyFloat_AsDouble(item));
-      }
+  void from_python(PyObject *pyobj, std::vector<double> &cppobj) {
+    PyList_Check(pyobj);
+    size_t len = PyList_Size(pyobj);
+    PyObject *item;
+    for (size_t i = 0; i < len; i++){
+      PyList_GetItem(item, i);
+      cppobj.push_back(PyFloat_AsDouble(item));
     }
-    std::vector<double> result;
   };
 
   /**
@@ -464,7 +429,7 @@ namespace pycpp {
    * be of type PyObject * as follows: make_tuple({pycpp::to_python(<value_1>), pycpp::to_python(<value_2>)})
    *
    * @param l The initializer list of arguments to be put into the tuple.
-   * @return A PyTuple that can be passed directly to the py_module operator() call.
+   * @return A PyTuple that can be passed directly to the py_object operator() call.
    */
   inline PyObject *make_tuple(std::initializer_list<PyObject *> &l){
 
@@ -491,7 +456,7 @@ namespace pycpp {
    * n is the total number of key-value PAIRS.
    *
    * @param l The initializer_list of key-value pairs.
-   * @return A PyDict that can be passed directly to the py_module operator() call.
+   * @return A PyDict that can be passed directly to the py_object operator() call.
    */
   inline PyObject *make_dict(std::initializer_list<PyObject *> &l){
     assert(l.size()%2 == 0);
@@ -512,11 +477,11 @@ namespace pycpp {
   }
 
   /**
-   * @class py_module include/py_module.hpp
+   * @class py_object include/py_object.hpp
    *
    * Imports a python module and offers call operators to simplify calling member functions of that module from C++.
    */
-  class py_module {
+  class py_object {
     //! The core Python module.
     PyObject *me;
 
@@ -541,29 +506,17 @@ namespace pycpp {
     /**
      * Default constructor - used internally only to make sure everything is working properly.
      */
-    py_module(){};
+    py_object(){};
 
     /**
-     * Allows for setting a py_module as a regular python object - as an object instead of a module or class. Also adds
+     * Allows for setting a py_object as a regular python object - as an object instead of a module or class. Also adds
      * the object to the global namespace.
      *
      * @param obj The python object we're tring to set to Python
      */
-    py_module(PyObject *obj){
+    py_object(PyObject *obj){
       me = std::move(obj);
-      globals[from_python<std::string>(PyObject_Str(obj)).result] = *this;
-    }
-
-    /**
-     * Allows for setting a py_module as a regular python object - as an object instead of a module or class. Also adds
-     * the object to the global namespace with a name.
-     *
-     * @param name The name for the object in the global namespace dictionary
-     * @param obj The python object we're tring to set to Python
-     */
-    py_module(const std::string &name, PyObject *obj){
-      me = std::move(obj);
-      globals[name] = *this;
+      Py_XDECREF(obj);
     }
 
     /**
@@ -572,7 +525,8 @@ namespace pycpp {
      * @param package The module to import.
      * @param py_home The home directory if it's different from pycpp::python_home (or the same, I don't judge)
      */
-    py_module(const std::string &package, const std::string &py_home = ""){
+    py_object(const std::string &package,
+              const std::string &py_home = ""){
 
       if (!py_home.empty()){
         setenv("PYTHONPATH", py_home.c_str(), 1);
@@ -583,7 +537,9 @@ namespace pycpp {
 
       Py_SetProgramName((char *)pycpp::which_python.c_str());
 
-      Py_Initialize();
+      if (!Py_IsInitialized()){
+        Py_Initialize();
+      }
 
       me = PyImport_Import(to_python(package));
       if (PyErr_Occurred()){
@@ -591,13 +547,12 @@ namespace pycpp {
         throw std::runtime_error("Unable to import package");
       }
 
-      globals[package] = *this;
     }
 
     /**
      * Destructor - cleans up the python references and finalizes the interpreter.
      */
-    ~py_module(){
+    ~py_object(){
       Py_CLEAR(me);
       Py_Finalize();
     }
@@ -622,7 +577,9 @@ namespace pycpp {
      * @param kwargs PyDict that holds the keyword arguments to pass to the function.
      * @return The return value of the function as a PyObject *.  It is left to the user to convert that back to C++.
      */
-    inline PyObject *operator()(const std::string &attr, PyObject *args, PyObject *kwargs = NULL){
+    inline PyObject *operator()(const std::string &attr,
+                                PyObject *args,
+                                PyObject *kwargs = NULL){
       assert(PyTuple_Check(args));
       assert(kwargs == NULL || kwargs == nullptr || PyDict_Check(kwargs));
 
@@ -646,13 +603,14 @@ namespace pycpp {
     /**
      * Given a string that is exactly a member function of a python module, calls that function with the given arguments
      * as the function's args tuple.  Creates a tuple of the arguments so that the function call can look like this:
-     * <py_module>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
+     * <py_object>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
      *
      * @param attr String that is exactly the name of a member function of the python module initialized.
      * @param args The initializer list of PyObject * types that make up the args of the function
      * @return The return value of the function as a PyObject *.  It is left to the user to convert that back to C++.
      */
-    inline PyObject *operator()(const std::string &attr, std::initializer_list<PyObject *> arg) {
+    inline PyObject *operator()(const std::string &attr,
+                                std::initializer_list<PyObject *> arg) {
 
       PyObject *args = pycpp::make_tuple(arg);
 
@@ -674,14 +632,16 @@ namespace pycpp {
     /**
      * Given a string that is exactly a member function of a python module, calls that function with the given arguments
      * as the function's args tuple.  Creates a tuple of the arguments so that the function call can look like this:
-     * <py_module>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
+     * <py_object>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
      *
      * @param attr String that is exactly the name of a member function of the python module initialized.
      * @param args The initializer list of PyObject * types that make up the args of the function
      * @param args The initializer list of PyObject * types that make up the keyword args of the function
      * @return The return value of the function as a PyObject *.  It is left to the user to convert that back to C++.
      */
-    inline PyObject *operator()(const std::string &attr, std::initializer_list<PyObject *> arg, std::initializer_list<PyObject *> kwarg) {
+    inline PyObject *operator()(const std::string &attr,
+                                std::initializer_list<PyObject *> arg,
+                                std::initializer_list<PyObject *> kwarg) {
 
       PyObject *args = pycpp::make_tuple(arg);
       PyObject *kwargs = pycpp::make_dict(kwarg);
@@ -710,8 +670,11 @@ namespace pycpp {
      * @return The return value of the function as its C++ type.
      */
     template<typename T>
-    inline T call(const std::string &attr){
-      return this->call<T>(attr, {});
+    inline void operator()(const std::string &attr,
+                           T &cpp_retval){
+      (*this)(attr, cpp_retval, {});
+
+      return;
     }
 
     /**
@@ -726,7 +689,10 @@ namespace pycpp {
      * @return The return value of the function as its C++ type. Throws errors if the object is not the correct type.
      */
     template<typename T>
-    inline T call(const std::string &attr, PyObject *args, PyObject *kwargs = NULL){
+    inline void operator()(const std::string &attr,
+                           T &cpp_retval,
+                           PyObject *args,
+                           PyObject *kwargs = NULL){
       assert(PyTuple_Check(args));
       assert(kwargs == NULL || kwargs == nullptr || PyDict_Check(kwargs));
 
@@ -744,13 +710,15 @@ namespace pycpp {
       PyDict_Clear(kwargs);
       Py_CLEAR(kwargs);
 
-      return from_python<T>(retval).result;
+      from_python(retval, cpp_retval);
+
+      return;
     }
     
     /**
      * Given a string that is exactly a member function of a python module, calls that function with the given arguments
      * as the function's args tuple.  Creates a tuple of the arguments so that the function call can look like this:
-     * <py_module>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
+     * <py_object>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)})
      * 
      * @tparam T C++ type of return value of specified function
      * @param attr String that is exactly the name of a member function of the python module initialized.
@@ -758,7 +726,9 @@ namespace pycpp {
      * @return The return value of the function as its C++ type. Throws errors if the object is not the correct type.
      */
     template<typename T>
-    inline T call(const std::string &attr, std::initializer_list<PyObject *> arg){
+    inline void operator()(const std::string &attr,
+                           T &cpp_retval,
+                           std::initializer_list<PyObject *> arg){
       
       PyObject *args = pycpp::make_tuple(arg);
 
@@ -773,15 +743,17 @@ namespace pycpp {
 
       Py_CLEAR(args);
       Py_CLEAR(callable);
-      
-      return from_python<T>(retval).result;
+
+      from_python(retval, cpp_retval);
+
+      return;
       
     }
 
     /**
      * Given a string that is exactly a member function of a python module, calls that function with the given arguments
      * as the function's args tuple.  Creates a tuple of the arguments so that the function call can look like this:
-     * <py_module>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)}, {pybpp::to_python("kwarg_key"), pycpp::to_python("kwarg_arg")})
+     * <py_object>("<function>", {pycpp::to_python("string"), pycpp::to_python(<value>)}, {pybpp::to_python("kwarg_key"), pycpp::to_python("kwarg_arg")})
      *
      * @tparam T C++ type of return value of specified function
      * @param attr String that is exactly the name of a member function of the python module initialized.
@@ -790,7 +762,10 @@ namespace pycpp {
      * @return The return value of the function as its C++ type. Throws errors if the object is not the correct type.
      */
     template<typename T>
-    inline T call(const std::string &attr, std::initializer_list<PyObject *> arg, std::initializer_list<PyObject *> kwarg){
+    inline void operator()(const std::string &attr,
+                           T &cpp_retval,
+                           std::initializer_list<PyObject *> arg,
+                           std::initializer_list<PyObject *> kwarg){
 
       PyObject *args = pycpp::make_tuple(arg);
       PyObject *kwargs = pycpp::make_dict(kwarg);
@@ -808,7 +783,9 @@ namespace pycpp {
       Py_CLEAR(kwargs);
       Py_CLEAR(callable);
 
-      return from_python<T>(retval).result;
+      from_python(retval, cpp_retval);
+
+      return;
 
     }
 
@@ -817,14 +794,14 @@ namespace pycpp {
      * changes.
      *
      * @param klass The class that is being imported - like pandas.DataFrame (for example)
-     * @return A new py_module with the subpackage as its base.
+     * @return A new py_object with the subpackage as its base.
      */
-    py_module py_class(const std::string &klass, PyObject *args = NULL, PyObject *kwargs = NULL){
+    py_object py_class(const std::string &klass, PyObject *args = NULL, PyObject *kwargs = NULL){
 
       assert(args == NULL || args == nullptr ||PyTuple_Check(args));
       assert(kwargs == NULL || kwargs == nullptr || PyDict_Check(kwargs));
 
-      py_module out;
+      py_object out;
 
       out.me = PyInstance_New( //creates a new instance of a class
               PyObject_GetAttr(this->me, to_python(klass)), //choose the class

@@ -21,11 +21,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../include/py_module.h"
+#include "../include/py_object.h"
 
 int main(int argc, char *argv[]){
 
-  py_module *p = new_py_module("subclass", "../../examples"); //Standard import of user-defined file.
+  py_object *p = new_py_object("subclass", "../../../examples"); //Standard import of user-defined file.
   //Remember it's running from Py_Cpp/build/examples so we need to tell it to import from the right directory.
   //This shows the other way to select the python home - pass it as an
   //argument to the constructor.
@@ -34,14 +34,14 @@ int main(int argc, char *argv[]){
   pyc_py_call(p, "add", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.2)), NULL);
 
   //Now we want the class we defined in the script subclass.py
-  py_module *math = pyc_py_class(p, "math_ops", NULL, NULL);
+  py_object *math = pyc_py_class(p, "math_ops", NULL, NULL);
 
   //And we call multiply from the sub class
   pyc_py_call(math, "multiply", pyc_make_tuple(2, PyFloat_FromDouble(1.1), PyFloat_FromDouble(2.)), NULL);
 
   //Now clean up the memory and return!
-  delete_py_module(math);
-  delete_py_module(p);
+  delete_py_object(math);
+  delete_py_object(p);
 
   return 0;
 }

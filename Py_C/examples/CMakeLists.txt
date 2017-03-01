@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.0)
 project(examples)
 
-set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_C_STANDARD 11)
 
 if (APPLE)
@@ -26,11 +25,11 @@ if (BREWED)
     set(PYTHON_LIBRARY "/usr/local/Frameworks/Python.framework/Versions/Current/lib/libpython2.7.dylib")
 endif ()
 
-MACRO(add_example name)
-    add_executable(${name} ${name}.cpp ../include/py_object.hpp)
-    target_link_libraries(${name} ${PYTHON_LIBRARY})
+MACRO(add_c_example name)
+    add_executable(${name}_c ${name}.c ../include/py_object.h)
+    target_link_libraries(${name}_c ${PYTHON_LIBRARY})
 ENDMACRO()
 
-add_example(hello_world)
-add_example(subclass)
-add_example(plotting)
+add_c_example(hello_world)
+add_c_example(plotting)
+add_c_example(subclass)

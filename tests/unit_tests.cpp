@@ -23,32 +23,41 @@
 
 #include <gtest/gtest.h>
 
-#include "../include/py_module.hpp"
-//#include "../include/py_module.h"
+#include "../include/py_object.hpp"
 
-TEST(import, pycpp_import){
-  EXPECT_NO_THROW(pycpp::py_module hello ("hello_world", "../../examples"));
+TEST(single_import, pycpp_import){
+  EXPECT_NO_THROW(pycpp::py_object hello ("hello_world", "../../examples"));
+}
+
+TEST(multi_import, pycpp_import){
+  EXPECT_NO_THROW(pycpp::py_object os ("os"));
+  EXPECT_NO_THROW(pycpp::py_object sys ("sys"));
 }
 
 TEST(helloworld, pycpp_examples){
-  pycpp::py_module hello ("hello_world", "../../examples");
+  pycpp::py_object hello ("hello_world", "../../examples");
 
   EXPECT_NO_THROW(hello("hello"));
   std::cout << std::endl;
-  EXPECT_EQ(hello.call<std::string>("retHello").compare("Hello, World!"), 0);
+  std::string ret;
+  hello("retHello", ret);
+  EXPECT_EQ(ret.compare("Hello, World!"), 0);
 }
 
 TEST(subclass, pycpp_examples){
-  pycpp::py_module p ("subclass", "../../examples");
+  pycpp::py_object p ("subclass", "../../examples");
 
-  float result1 = pycpp::from_python<float>(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)})).result;
+  float result1;
+  pycpp::from_python(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)}), result1);
   EXPECT_EQ(result1, 3.3f);
 
-  pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
-  float result2 = pycpp::from_python<float>(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)})).result; //And we call multiply to make sure that works.
+  pycpp::py_object math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
+  float result2;
+  pycpp::from_python(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)}), result2); //And we call multiply to make sure that works.
   EXPECT_EQ(result2, 2.2f);
 
-  float result3 = math.call<float>("multiply", {pycpp::to_python(1.1), pycpp::to_python(4.)});
+  float result3;
+  math("multiply", result3, {pycpp::to_python(1.1), pycpp::to_python(4.)});
   EXPECT_EQ(result3, 4.4f);
 }
 

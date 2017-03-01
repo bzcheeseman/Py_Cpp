@@ -21,16 +21,16 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../include/py_module.h"
+#include "../Py_C/include/py_object.h"
 
 int main(int argc, char *argv[]){
 
   pyc_which_python = "/usr/local/bin/python";
 
   //import testing
-  py_module *psys = new_py_module("sys", NULL);
-  py_module *pos = new_py_module("os", NULL);
-  py_module *ptime = new_py_module("time", NULL);
+  py_object *psys = new_py_object("sys", NULL);
+  py_object *pos = new_py_object("os", NULL);
+  py_object *ptime = new_py_object("time", NULL);
 
   //if the imports worked
   if (psys && pos && ptime){

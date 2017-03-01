@@ -23,26 +23,26 @@
 
 #include <iostream>
 
-#include "../include/py_module.hpp"
+#include "../include/py_object.hpp"
 
 int main(int argc, char *argv[]){
 
-  pycpp::py_module p ("subclass", "../../examples"); //Standard import of user-defined file, remember that it's running from
+  pycpp::py_object p ("subclass", "../../examples"); //Standard import of user-defined file, remember that it's running from
   //Py_Cpp/build/examples so we need to tell it to add two directories up to the Python path.
   //This shows the other way to select the python home - pass it as an argument to the constructor.
 
   //Call the add function to check and be sure that works - both return and print
-  float result = pycpp::from_python<float>(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)})).result;
+  float result;
+  pycpp::from_python(p("add", {pycpp::to_python(1.1), pycpp::to_python(2.2)}), result);
   std::cout << result << std::endl;
 
 
-  pycpp::py_module math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
-  result = pycpp::from_python<float>(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)})).result; //And we call multiply to make sure that works.
+  pycpp::py_object math = p.py_class("math_ops"); //Now we want the class we defined in the script subclass.py
+  pycpp::from_python(math("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)}), result); //And we call multiply to make sure that works.
   std::cout << result << std::endl;
 
-  //There's another way to get the C++ value from python - an templated call function. It's not an operator() call
-  //because you need to template it anyway, so I decided it might just be better to have a function name.
-  result = math.call<float>("multiply", {pycpp::to_python(1.1), pycpp::to_python(2.)});
+  //There's another way to get the C++ value from python - a templated call operator.
+  math("multiply", result, {pycpp::to_python(1.1), pycpp::to_python(2.)});
   std::cout << result << std::endl;
 
   return 0;

@@ -23,19 +23,20 @@
 
 #include <iostream>
 
-#include "../include/py_module.hpp"
+#include "../include/py_object.hpp"
 
 int main(int argc, char *argv[]){
 
   pycpp::which_python = "/usr/local/bin/python"; //Select the python executable, found by typing (bash)$ which python
   pycpp::python_home = "../../examples"; //Select the python home - this is needed if you're importing scripts you wrote!
 
-  pycpp::py_module p ("hello_world"); //This is a python script that I wrote in hello_world.py
+  pycpp::py_object p ("hello_world"); //This is a python script that I wrote in hello_world.py
 
   p("hello"); //And this just calls the function 'hello' from that script.
 
   //Demonstrating the from_python functionality - all the from_python functions work just like this.
-  std::string r = pycpp::from_python<std::string>(p("retHello")).result;
+  std::string r;
+  pycpp::from_python(p("retHello"), r);
   std::cout << r << std::endl;
 
 

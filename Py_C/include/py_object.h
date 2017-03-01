@@ -47,12 +47,12 @@
  */
 
 /**
- * @file include/py_module.h
+ * @file include/py_object.h
  *
  * Holds the C implementation of the pycpp tools. Not all the tools are here because of the lack of function and
  * operator overloading in C, and wanting to keep the interface clean. This version leaves the conversion to python up
  * to the user of the library, although that user is welcome to see the implementation for the conversion functions in
- * py_module.hpp for guidance.
+ * py_object.hpp for guidance.
  */
 
 /**
@@ -69,22 +69,25 @@ char *pyc_which_python = PYC_WHICH_PYTHON;
 char *pyc_python_home = PYC_PY_HOME;
 
 /**
- * @struct py_module
+ * @struct py_object
  * @brief Holds the PyObject that represents the module (or class) we've imported.
  *
  * Holds the module we imported (or class) as well as the logs for the module.  The logfiles are stored in
  * the build folder. That can be changed but will require changing the names of the logfiles in each of their calls
  * in this file.
  */
-struct py_module{
+struct py_object{
   //! The PyObject that represents the object we're trying to import/call
   PyObject *me;
 
   //! Holds the logfiles for a module.
   logs_t *log;
+
+  //! Whether or not this py_object is a subclass - so we don't finalize the interpreter too early!
+  bool is_subclass;
 };
 
-typedef struct py_module py_module;
+typedef struct py_object py_object;
 
 /**
  * Checks if a PyObject * is callable - throws an error if it's not.
@@ -105,15 +108,15 @@ bool check_callable(PyObject *obj, logs_t *logs) {
 }
 
 /**
- * Create a new py_module struct that holds all the various items needed to call python objects.
+ * Create a new py_object struct that holds all the various items needed to call python objects.
  *
  * @param package Which package to import
  * @param py_home Where to set the python home. If set to NULL, defaults to the cmake path
- * @return New py_module that contains a python object and (if needed) its subclasses.
+ * @return New py_object that contains a python object and (if needed) its subclasses.
  */
-py_module *new_py_module(const char *package, const char *py_home){
+py_object *new_py_object(const char *package, const char *py_home){
 
-  py_module *newmodule = malloc(sizeof(py_module));
+  py_object *newmodule = malloc(sizeof(py_object));
   newmodule->log = new_logs();
 
   if (py_home){
@@ -125,7 +128,9 @@ py_module *new_py_module(const char *package, const char *py_home){
 
   Py_SetProgramName(pyc_which_python);
 
-  Py_Initialize();
+  if (!Py_IsInitialized()){
+    Py_Initialize();
+  }
 
   newmodule->me = PyImport_Import(PyString_FromString(package));
   if (PyErr_Occurred()){
@@ -141,17 +146,15 @@ py_module *new_py_module(const char *package, const char *py_home){
 }
 
 /**
- * Frees memory associated with the py_module.
+ * Frees memory associated with the py_object.
  *
  * @param module The module to free
  */
-void delete_py_module(py_module *module){
-  if (module){
-    Py_XDECREF(module->me);
-    close_log(module->log);
-    free(module);
+void delete_py_object(py_object *module){
+  if (!module->is_subclass){
+    Py_Finalize();
   }
-  Py_Finalize();
+  free(module);
 }
 
 /**
@@ -241,7 +244,7 @@ PyObject *pyc_make_list(double *list, size_t len){
  * @param kwargs The keyword args to pass to the function as a PyDict
  * @return The return value of the function call - conversion is up to the user
  */
-PyObject *pyc_py_call(py_module *module, const char *attr, PyObject *args, PyObject *kwargs){
+PyObject *pyc_py_call(py_object *module, const char *attr, PyObject *args, PyObject *kwargs){
 
   assert(PyTuple_Check(args));
   assert(kwargs == NULL || PyDict_Check(kwargs));
@@ -292,21 +295,23 @@ PyObject *pyc_py_call(py_module *module, const char *attr, PyObject *args, PyObj
  * @param klass The submodule (or class) to import
  * @param args Arguments to pass to class constructor
  * @param kwargs Keyword arguments to pass to the class constructor
- * @return A new py_module with the imported class contained within it.
+ * @return A new py_object with the imported class contained within it.
  */
-py_module *pyc_py_class(py_module *module, const char *klass, PyObject *args, PyObject *kwargs){
+py_object *pyc_py_class(py_object *module, const char *klass, PyObject *args, PyObject *kwargs){
 
   assert(args == NULL || PyTuple_Check(args));
   assert(kwargs == NULL || PyDict_Check(kwargs));
 
   //setup the new output module
-  py_module *out = malloc(sizeof(py_module));
+  py_object *out = malloc(sizeof(py_object));
   out->log = new_logs();
 
   out->me = PyInstance_New( //creates a new instance of a class
           PyObject_GetAttr(module->me, PyString_FromString(klass)), //choose the class
           args, //pass args
           kwargs); //pass kwargs
+
+  out->is_subclass = true;
 
   if (PyErr_Occurred()){
     PyErr_Print();

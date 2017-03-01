@@ -21,7 +21,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../include/py_module.h"
+#include "../include/py_object.h"
 
 int main(int argc, char *argv[]){
   pyc_which_python = "/usr/local/bin/ipython"; //Note that matplotlib prefers brewed python if you have it
@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
   //matplotlib is picky - gotta make sure the backend is right
   setenv("MPLBACKEND", "TkAgg", 1);
   //Choose a module to import
-  py_module *p = new_py_module("matplotlib.pyplot", pyc_python_home);
+  py_object *p = new_py_object("matplotlib.pyplot", pyc_python_home);
 
   //C++ data of some form
   double data[4] = {1.,2.,3.,4.};
@@ -49,6 +49,6 @@ int main(int argc, char *argv[]){
   pyc_py_call(p, "show", pyc_make_tuple(0), NULL);
   
   //Clean up
-  delete_py_module(p);
+  delete_py_object(p);
 }
 

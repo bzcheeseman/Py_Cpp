@@ -21,13 +21,13 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "../include/py_module.h"
+#include "../include/py_object.h"
 
 int main(int argc, char *argv[]){
-  //This line creates a new py_module, and in the process imports the hello_world script from the examples folder.
+  //This line creates a new py_object, and in the process imports the hello_world script from the examples folder.
   //Keep in mind that we are running from Py_Cpp/build/examples, so we need to go up two levels and then into the
   //examples folder.
-  py_module *module = new_py_module("hello_world", "../../examples");
+  py_object *module = new_py_object("hello_world", "../../../examples");
 
   //Now we make the call to the function in the file hello_world.py.  Notice that we need to pass an empty tuple
   //even if there are no arguments - this is a Python requirement that I've decided to keep because it forces the user
@@ -36,7 +36,7 @@ int main(int argc, char *argv[]){
 
   //If nothing went wrong, a.k.a. we have some return value, free the module.
   if(retval){
-    delete_py_module(module);
+    delete_py_object(module);
   }
 
   return 0;

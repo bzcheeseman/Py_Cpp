@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "../include/py_module.hpp"
+#include "../include/py_object.hpp"
 
 int main() {
 
@@ -10,7 +10,7 @@ int main() {
   //matplotlib is picky - gotta make sure the backend is right, make sure to change the backend to something appropriate.
   setenv("MPLBACKEND", "TkAgg", 1);
   //Choose a module to import
-  pycpp::py_module p ("matplotlib.pyplot");
+  pycpp::py_object p ("matplotlib.pyplot");
 
   //C++ data of some form
   std::vector <double> data = {1.,2.,3.,4.};
