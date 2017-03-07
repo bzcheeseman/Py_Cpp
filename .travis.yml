@@ -14,14 +14,10 @@ script:
   - mkdir build; cd build; cmake ..
   - cd examples; make
   - cd ../../tests/gtest; mkdir build; cd build; cmake ..; make
-  - cd ../../../build/tests; make
-#  - ./unit_tests
+  - cd ../../../build/tests; make; ./unit_tests
 compiler:
   - gcc
   - clang
 os:
   - osx
   - linux
-branches:
-  only:
-    - master

@@ -42,10 +42,6 @@
   #define PYC_PY_HOME "../.."
 #endif
 
-/*
- * TODO: Implement an error struct like in hA?
- */
-
 /**
  * @file include/py_object.h
  *
@@ -151,9 +147,11 @@ py_object *new_py_object(const char *package, const char *py_home){
  * @param module The module to free
  */
 void delete_py_object(py_object *module){
-  if (!module->is_subclass){
+
+  if (Py_IsInitialized() && !module->is_subclass){
     Py_Finalize();
   }
+
   free(module);
 }
 
