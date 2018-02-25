@@ -4,7 +4,7 @@
 
 int main() {
 
-  pycpp::which_python = "/usr/local/bin/ipython"; //Note that matplotlib prefers ipython if you have a brewed python
+  pycpp::which_python = "/usr/local/bin/python"; //Note that matplotlib prefers ipython if you have a brewed python
                                                   //on your system.
 
   //matplotlib is picky - gotta make sure the backend is right, make sure to change the backend to something appropriate.
@@ -13,7 +13,11 @@ int main() {
   pycpp::py_module p ("matplotlib.pyplot");
 
   //C++ data of some form
-  std::vector <double> data = {1.,2.,3.,4.};
+  std::vector<double> data;
+  data.push_back(1.);
+  data.push_back(1.3);
+  data.push_back(3.);
+  data.push_back(2.);
 
   //Call the python module you want to call - make sure you take all the data to python via calls to to_python. The
   //arguments to a function are a python tuple (make_tuple) while the keyword arguments are a python dictionary (make_dict).

@@ -1,9 +1,9 @@
 //
 // Created by Aman LaChapelle on 12/10/16.
 //
-// Project
+// Py_C
 // Copyright (c) 2016 Aman LaChapelle
-// Full license at Project/LICENSE.txt
+// Full license at Py_C/LICENSE.txt
 //
 
 /*
@@ -29,12 +29,12 @@
 
 #include "../internal/logging.h"
 
-#ifndef PROJECT_PY_MODULE_H
-#define PROJECT_PY_MODULE_H
+#ifndef PY_C_PY_MODULE_H
+#define PY_C_PY_MODULE_H
 
 //! This allows us to use the python interpreter that CMake finds.
 #ifndef PYC_WHICH_PYTHON
-  #define PYC_WHICH_PYTHON "/usr/local/bin/ipython"
+  #define PYC_WHICH_PYTHON "/usr/local/bin/python"
 #endif
 
 //! Gives us a smart value for the home directory - again from the CMake source directory.
@@ -324,7 +324,4 @@ py_module *pyc_py_class(py_module *module, const char *klass, PyObject *args, Py
   }
 }
 
-
-
-
-#endif //PROJECT_PY_MODULE_H
+#endif //PY_C_PY_MODULE_H

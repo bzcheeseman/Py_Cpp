@@ -1,9 +1,9 @@
 //
 // Created by Aman LaChapelle on 12/10/16.
 //
-// Project
+// Py_C
 // Copyright (c) 2016 Aman LaChapelle
-// Full license at Project/LICENSE.txt
+// Full license at Py_C/LICENSE.txt
 //
 
 /*
@@ -22,8 +22,8 @@
  */
 
 
-#ifndef PROJECT_LOGGING_H
-#define PROJECT_LOGGING_H
+#ifndef PY_C_LOGGING_H
+#define PY_C_LOGGING_H
 
 #include <stdio.h>
 #include <string.h>
@@ -101,9 +101,4 @@ void close_log(logs_t *logs){
 }
 
 
-
-
-
-
-
-#endif //PROJECT_LOGGING_H
+#endif //PY_C_LOGGING_H
